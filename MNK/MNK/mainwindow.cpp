@@ -119,7 +119,7 @@ void MainWindow::on_outbaseButton_clicked()
 {
     std::ifstream dataBase;
     std::ofstream log;
-    dataBase.open("../../../data.csv");
+    dataBase.open("C:/Users/Admin/Documents/Work/Work/MNK/data.csv");
     //log.open("D:\\Dropbox\\log.txt");
     std::string text;
     dataBase >> text;
@@ -149,7 +149,7 @@ void MainWindow::on_inbaseButton_clicked()
     }
 
     std::ofstream dataBase;
-    dataBase.open("C:\\Dropbox\\data.csv");
+    dataBase.open("C:\\Users\\Admin\\Desktop\\data.csv");
     dataBase << "X;Y;W;A;B" << std::endl;
 
     for (int i = 0; i < size; i++)
