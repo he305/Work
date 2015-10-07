@@ -1,0 +1,28 @@
+#include "invertedmatrixwindow.h"
+#include "ui_invertedmatrixwindow.h"
+
+InvertedMatrixWindow::InvertedMatrixWindow(QWidget *parent, double **inverted, int size) :
+    QWidget(parent),
+    ui(new Ui::InvertedMatrixWindow)
+{
+    ui->setupUi(this);
+
+
+}
+
+InvertedMatrixWindow::drawInverted(){
+    int size = 10;
+    QLineEdit ***line = new QLineEdit **[size];
+    for (int i = 0; i < size; i++){
+        line[i] = new QLineEdit *[size];
+        for (int j = 0; j < size; j++){
+            line[i][j] = new QLineEdit(this);
+            ui->grid_matrix->addWidget(line[i][j], i, j);
+        }
+    }
+}
+
+InvertedMatrixWindow::~InvertedMatrixWindow()
+{
+    delete ui;
+}

@@ -1,0 +1,27 @@
+c:\users\чернышов\documents\visual studio 2013\Projects\DFT\DFT\bin\Debug\DFT.exe.config
+c:\users\чернышов\documents\visual studio 2013\Projects\DFT\DFT\bin\Debug\DFT.exe
+c:\users\чернышов\documents\visual studio 2013\Projects\DFT\DFT\bin\Debug\DFT.pdb
+c:\users\чернышов\documents\visual studio 2013\Projects\DFT\DFT\obj\Debug\DFT.csprojResolveAssemblyReference.cache
+c:\users\чернышов\documents\visual studio 2013\Projects\DFT\DFT\obj\Debug\DFT.Graph.resources
+c:\users\чернышов\documents\visual studio 2013\Projects\DFT\DFT\obj\Debug\DFT.Properties.Resources.resources
+c:\users\чернышов\documents\visual studio 2013\Projects\DFT\DFT\obj\Debug\DFT.csproj.GenerateResource.Cache
+c:\users\чернышов\documents\visual studio 2013\Projects\DFT\DFT\obj\Debug\DFT.exe
+c:\users\чернышов\documents\visual studio 2013\Projects\DFT\DFT\obj\Debug\DFT.pdb
+C:\Users\Sergey\Dropbox\DFT\DFT\bin\Debug\DFT.exe.config
+C:\Users\Sergey\Dropbox\DFT\DFT\obj\Debug\DFT.exe
+C:\Users\Sergey\Dropbox\DFT\DFT\obj\Debug\DFT.pdb
+C:\Users\Sergey\Dropbox\DFT\DFT\bin\Debug\DFT.exe
+C:\Users\Sergey\Dropbox\DFT\DFT\bin\Debug\DFT.pdb
+C:\Users\Sergey\Dropbox\DFT\DFT\obj\Debug\DFT.csprojResolveAssemblyReference.cache
+C:\Users\Sergey\Dropbox\DFT\DFT\obj\Debug\DFT.Graph.resources
+C:\Users\Sergey\Dropbox\DFT\DFT\obj\Debug\DFT.Properties.Resources.resources
+C:\Users\Sergey\Dropbox\DFT\DFT\obj\Debug\DFT.csproj.GenerateResource.Cache
+C:\Users\Чернышов\Dropbox\DFT\DFT\bin\Debug\DFT.exe.config
+C:\Users\Чернышов\Dropbox\DFT\DFT\obj\Debug\DFT.exe
+C:\Users\Чернышов\Dropbox\DFT\DFT\obj\Debug\DFT.pdb
+C:\Users\Чернышов\Dropbox\DFT\DFT\bin\Debug\DFT.exe
+C:\Users\Чернышов\Dropbox\DFT\DFT\bin\Debug\DFT.pdb
+C:\Users\Чернышов\Dropbox\DFT\DFT\obj\Debug\DFT.csprojResolveAssemblyReference.cache
+C:\Users\Чернышов\Dropbox\DFT\DFT\obj\Debug\DFT.Graph.resources
+C:\Users\Чернышов\Dropbox\DFT\DFT\obj\Debug\DFT.Properties.Resources.resources
+C:\Users\Чернышов\Dropbox\DFT\DFT\obj\Debug\DFT.csproj.GenerateResource.Cache
