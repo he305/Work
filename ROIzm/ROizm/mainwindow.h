@@ -17,8 +17,16 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+private slots:
+    void on_refreshButton_clicked();
+
 private:
     Ui::MainWindow *ui;
+    double proizv(double);
+    double proizv2(double);
+    double velocity;
+    double time;
+    double R;
 };
 
 #endif // MAINWINDOW_H

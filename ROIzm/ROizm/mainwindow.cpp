@@ -1,26 +1,45 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "radspeed.h"
+#include <math.h>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    QList<RadSpeed> *list = new QList<RadSpeed>();
-    int a = 3;
-    int b = 3;
-    int c = 4;
-    int d = 5;
-    RadSpeed* rd = new RadSpeed(&a, &b, &c, &d);
-    list->append(*rd);
-    for (int i = 0; i < list->size(); i++)
-    {
-        qDebug() << *(list->at(i).angle);
-    }
+
+    velocity = ui->velEdit->text().toDouble();
+    time = ui->timeEdit->text().toDouble();
+    R = ui->REdit->text().toDouble();
+
+    qDebug() << atan(velocity*time/R);
+
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::on_refreshButton_clicked()
+{
+    velocity = ui->velEdit->text().toDouble();
+    time = ui->timeEdit->text().toDouble();
+    R = ui->REdit->text().toDouble();
+
+    double x = velocity*time/R;
+    double y = atan(x);
+    qDebug() << y;
+    qDebug() << proizv(x);
+    qDebug() << proizv2(x);
+}
+
+double MainWindow::proizv(double x)
+{
+    return 1/(pow(x, 2) + 1);
+}
+
+double MainWindow::proizv2(double x)
+{
+    return -2*x/(pow((pow(x, 2) + 1), 2));
 }

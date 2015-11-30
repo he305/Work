@@ -13,12 +13,8 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
-    radspeed.cpp \
-    glidepath.cpp
+        mainwindow.cpp
 
-HEADERS  += mainwindow.h \
-    radspeed.h \
-    glidepath.h
+HEADERS  += mainwindow.h
 
 FORMS    += mainwindow.ui
