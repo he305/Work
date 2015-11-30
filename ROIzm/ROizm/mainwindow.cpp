@@ -8,12 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    velocity = ui->velEdit->text().toDouble();
-    time = ui->timeEdit->text().toDouble();
-    R = ui->REdit->text().toDouble();
-
-    qDebug() << atan(velocity*time/R);
-
+    on_refreshButton_clicked();
 }
 
 MainWindow::~MainWindow()
