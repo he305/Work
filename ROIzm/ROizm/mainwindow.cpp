@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <math.h>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -21,20 +20,23 @@ void MainWindow::on_refreshButton_clicked()
     velocity = ui->velEdit->text().toDouble();
     time = ui->timeEdit->text().toDouble();
     R = ui->REdit->text().toDouble();
+    interval = ui->intervalEdit->text().toDouble();
 
     double x = velocity*time/R;
-    double y = atan(x);
-    qDebug() << y;
-    qDebug() << proizv(x);
-    qDebug() << proizv2(x);
-}
 
-double MainWindow::proizv(double x)
-{
-    return 1/(pow(x, 2) + 1);
-}
+    if (fm == nullptr)
+    {
+        fm = new FuncMaker(x, time, interval);
+    }
+    else
+    {
+        fm->refresh(x, time, interval);
+    }
 
-double MainWindow::proizv2(double x)
-{
-    return -2*x/(pow((pow(x, 2) + 1), 2));
+    ui->yEdit->setText(QString::number(fm->getY()));
+    ui->y1Edit->setText(QString::number(fm->getY1()));
+    ui->y2Edit->setText(QString::number(fm->getY2()));
+    ui->funcEdit->setText(QString::number(fm->make()));
+
+    fm->db(velocity, R);
 }

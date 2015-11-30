@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QList>
 #include <QDebug>
+#include "funcmaker.h"
 
 namespace Ui {
 class MainWindow;
@@ -22,11 +23,12 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    double proizv(double);
-    double proizv2(double);
     double velocity;
     double time;
     double R;
+    double interval;
+
+    FuncMaker* fm = nullptr;
 };
 
 #endif // MAINWINDOW_H
