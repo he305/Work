@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include "qmessagebox"
 #include "ui_mainwindow.h"
 #include "invertedmatrixwindow.h"
 #include <invert.h>

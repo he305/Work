@@ -1,4 +1,4 @@
-#include "Invert.h"
+#include "invert.h"
 #include "typematrix.h"
 #include "Log.h"
 #include <iostream>
