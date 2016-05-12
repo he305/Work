@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    qDebug() << qApp->applicationDirPath();
     this->setFixedSize(477, 461);
     ui->setupUi(this);
     ui->nEdit->setAlignment(Qt::AlignRight);
@@ -149,8 +150,8 @@ void MainWindow::on_inbaseButton_clicked()
     }
 
     std::ofstream dataBase;
-    dataBase.open("C:\\Users\\Admin\\Desktop\\data.csv");
-    dataBase << "X;Y;W;A;B" << std::endl;
+    QString dataPath = "/../data.csv";
+    dataBase.open((qApp->applicationDirPath()+dataPath).toStdString().c_str());
 
     for (int i = 0; i < size; i++)
     {
