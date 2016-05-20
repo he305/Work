@@ -43,7 +43,8 @@ void ConsoleTest::solve()
         a[i] = new double[polynomePower+1];
     }
 
-    //a(i,j) = sum(k->size)(xi^(polynomePower-i+1)*xi^(polynomePower-j+1))
+    //Old version: a(i,j) = sum(k->size)(xi^(polynomePower-i+1)*xi^(polynomePower-j+1))
+    //New version: a(i,j) = sum(k->size)(xk^(i+j))
     for (int i = 0; i < polynomePower+1; i++)
     {
         for (int j = 0; j < polynomePower+1; j++)
@@ -51,7 +52,8 @@ void ConsoleTest::solve()
             int sum = 0;
             for (int k = 0; k < size; k++)
             {
-                sum += pow(x[k], polynomePower-i+1) * pow(x[k], polynomePower-j+1);
+                sum += pow(x[k], i+j);
+                cout << i << ":" << j << ":" << k << ":" <<sum << "\n";
             }
             a[i][j] = sum;
         }
@@ -66,14 +68,15 @@ void ConsoleTest::solve()
         cout << "\n";
     }
 
-    //zi = sum(j->size)(xj^(polynomePower-i+1)*yj)
+    //Old version: zi = sum(j->size)(xj^(polynomePower-i+1)*yj)
+    //New version: zi = sum(j->size)(xj^i*yj)
     double* z = new double[polynomePower+1];
     for (int i = 0; i < polynomePower+1; i++)
     {
         int sum = 0;
         for (int j = 0; j < size; j++)
         {
-            sum += pow(x[j], polynomePower-i+1) * y[j];
+            sum += pow(x[j], i) * y[j];
         }
         z[i] = sum;
     }
