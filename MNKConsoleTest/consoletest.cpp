@@ -86,6 +86,15 @@ void ConsoleTest::solve()
     {
         cout << z[i] << "\n";
     }
+
+    LUDecompose* lu = new LUDecompose(a, z, polynomePower+1);
+    double* x = lu->lupSolve();
+
+    cout << "\n\nРешение: ";
+    for (int i = 0; i < polynomePower+1; i++)
+    {
+        cout << x[i] << "\n";
+    }
 }
 
 ConsoleTest::ConsoleTest()

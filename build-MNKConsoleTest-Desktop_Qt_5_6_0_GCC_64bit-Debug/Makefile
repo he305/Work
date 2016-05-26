@@ -49,9 +49,11 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = ../MNKConsoleTest/main.cpp \
-		../MNKConsoleTest/consoletest.cpp 
+		../MNKConsoleTest/consoletest.cpp \
+		../MNKConsoleTest/ludecompose.cpp 
 OBJECTS       = main.o \
-		consoletest.o
+		consoletest.o \
+		ludecompose.o
 DIST          = ../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/common/unix.conf \
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/common/linux.conf \
@@ -180,8 +182,10 @@ DIST          = ../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/exceptions.prf \
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/yacc.prf \
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/lex.prf \
-		../MNKConsoleTest/MNKConsoleTest.pro consoletest.h ../MNKConsoleTest/main.cpp \
-		../MNKConsoleTest/consoletest.cpp
+		../MNKConsoleTest/MNKConsoleTest.pro consoletest.h \
+		ludecompose.h ../MNKConsoleTest/main.cpp \
+		../MNKConsoleTest/consoletest.cpp \
+		../MNKConsoleTest/ludecompose.cpp
 QMAKE_TARGET  = MNKConsoleTest
 DESTDIR       = 
 TARGET        = MNKConsoleTest
@@ -497,6 +501,9 @@ main.o: ../MNKConsoleTest/main.cpp ../MNKConsoleTest/consoletest.h
 
 consoletest.o: ../MNKConsoleTest/consoletest.cpp ../MNKConsoleTest/consoletest.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o consoletest.o ../MNKConsoleTest/consoletest.cpp
+
+ludecompose.o: ../MNKConsoleTest/ludecompose.cpp ../MNKConsoleTest/ludecompose.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ludecompose.o ../MNKConsoleTest/ludecompose.cpp
 
 ####### Install
 

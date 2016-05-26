@@ -4,7 +4,9 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += main.cpp \
-    consoletest.cpp
+    consoletest.cpp \
+    ludecompose.cpp
 
 HEADERS += \
-    consoletest.h
+    consoletest.h \
+    ludecompose.h

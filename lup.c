@@ -163,7 +163,7 @@ int* lupDecomposition(float** a, int size)
     for(i = 0; i < size; i++)
     {
         j = maxInColumn(a, i, size);
-        if(i != j)
+	if(i != j)
         {
              swapRow(a, i, j);
              k = p[i];
@@ -173,6 +173,7 @@ int* lupDecomposition(float** a, int size)
 
         for(j = i, j++; j < size; j++)
         {
+	    printf("\nj = %d", j);
             a[j][i] /= a[i][i];
         }
         for(j = i, j++; j < size; j++)

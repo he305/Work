@@ -1,5 +1,6 @@
 #include <iostream>
 #include <math.h>
+#include "ludecompose.h"
 
 #ifndef CONSOLETEST_H
 #define CONSOLETEST_H
