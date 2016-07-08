@@ -12,10 +12,10 @@ MAKEFILE      = Makefile
 
 CC            = gcc
 CXX           = g++
-DEFINES       = -DQT_QML_DEBUG
-CFLAGS        = -pipe -g -Wall -W -fPIC $(DEFINES)
-CXXFLAGS      = -pipe -g -std=gnu++0x -Wall -W -fPIC $(DEFINES)
-INCPATH       = -I../MNKConsoleTest -I. -I../../../Qt5.6.0/5.6/gcc_64/mkspecs/linux-g++
+DEFINES       = -DQT_QML_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB
+CFLAGS        = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
+CXXFLAGS      = -pipe -g -std=gnu++0x -Wall -W -D_REENTRANT -fPIC $(DEFINES)
+INCPATH       = -I../MNKConsoleTest -I. -I../../../Qt5.6.0/5.6/gcc_64/include -I../../../Qt5.6.0/5.6/gcc_64/include/QtGui -I../../../Qt5.6.0/5.6/gcc_64/include/QtCore -I. -I../../../Qt5.6.0/5.6/gcc_64/mkspecs/linux-g++
 QMAKE         = /home/sergey/Qt5.6.0/5.6/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -35,8 +35,8 @@ COMPRESS      = gzip -9f
 DISTNAME      = MNKConsoleTest1.0.0
 DISTDIR = /home/sergey/Git/Work/build-MNKConsoleTest-Desktop_Qt_5_6_0_GCC_64bit-Debug/.tmp/MNKConsoleTest1.0.0
 LINK          = g++
-LFLAGS        = -Wl,-z,origin -Wl,-rpath,\$$ORIGIN
-LIBS          = $(SUBLIBS)  
+LFLAGS        = -Wl,-z,origin -Wl,-rpath,\$$ORIGIN -Wl,-rpath,/home/sergey/Qt5.6.0/5.6/gcc_64/lib
+LIBS          = $(SUBLIBS) -L/home/sergey/Qt5.6.0/5.6/gcc_64/lib -lQt5Gui -lQt5Core -lGL -lpthread 
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -178,12 +178,17 @@ DIST          = ../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/default_post.prf \
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/qml_debug.prf \
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/warn_on.prf \
+		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/qt.prf \
+		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/resources.prf \
+		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/moc.prf \
+		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/unix/opengl.prf \
+		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/unix/thread.prf \
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/testcase_targets.prf \
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/exceptions.prf \
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/yacc.prf \
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/lex.prf \
-		../MNKConsoleTest/MNKConsoleTest.pro consoletest.h \
-		ludecompose.h ../MNKConsoleTest/main.cpp \
+		../MNKConsoleTest/MNKConsoleTest.pro ../MNKConsoleTest/consoletest.h \
+		../MNKConsoleTest/ludecompose.h ../MNKConsoleTest/main.cpp \
 		../MNKConsoleTest/consoletest.cpp \
 		../MNKConsoleTest/ludecompose.cpp
 QMAKE_TARGET  = MNKConsoleTest
@@ -321,11 +326,18 @@ Makefile: ../MNKConsoleTest/MNKConsoleTest.pro ../../../Qt5.6.0/5.6/gcc_64/mkspe
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/default_post.prf \
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/qml_debug.prf \
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/warn_on.prf \
+		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/qt.prf \
+		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/resources.prf \
+		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/moc.prf \
+		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/unix/opengl.prf \
+		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/unix/thread.prf \
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/testcase_targets.prf \
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/exceptions.prf \
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/yacc.prf \
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/lex.prf \
-		../MNKConsoleTest/MNKConsoleTest.pro
+		../MNKConsoleTest/MNKConsoleTest.pro \
+		../../../Qt5.6.0/5.6/gcc_64/lib/libQt5Gui.prl \
+		../../../Qt5.6.0/5.6/gcc_64/lib/libQt5Core.prl
 	$(QMAKE) -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug -o Makefile ../MNKConsoleTest/MNKConsoleTest.pro
 ../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/spec_pre.prf:
 ../../../Qt5.6.0/5.6/gcc_64/mkspecs/common/unix.conf:
@@ -451,11 +463,18 @@ Makefile: ../MNKConsoleTest/MNKConsoleTest.pro ../../../Qt5.6.0/5.6/gcc_64/mkspe
 ../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/default_post.prf:
 ../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/qml_debug.prf:
 ../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/warn_on.prf:
+../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/qt.prf:
+../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/resources.prf:
+../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/moc.prf:
+../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/unix/opengl.prf:
+../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/unix/thread.prf:
 ../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/testcase_targets.prf:
 ../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/exceptions.prf:
 ../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/yacc.prf:
 ../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/lex.prf:
 ../MNKConsoleTest/MNKConsoleTest.pro:
+../../../Qt5.6.0/5.6/gcc_64/lib/libQt5Gui.prl:
+../../../Qt5.6.0/5.6/gcc_64/lib/libQt5Core.prl:
 qmake: FORCE
 	@$(QMAKE) -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug -o Makefile ../MNKConsoleTest/MNKConsoleTest.pro
 
@@ -470,6 +489,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
+	$(COPY_FILE) --parents ../MNKConsoleTest/consoletest.h ../MNKConsoleTest/ludecompose.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../MNKConsoleTest/main.cpp ../MNKConsoleTest/consoletest.cpp ../MNKConsoleTest/ludecompose.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -484,8 +505,18 @@ distclean: clean
 
 ####### Sub-libraries
 
+mocclean: compiler_moc_header_clean compiler_moc_source_clean
+
+mocables: compiler_moc_header_make_all compiler_moc_source_make_all
+
 check: first
 
+compiler_rcc_make_all:
+compiler_rcc_clean:
+compiler_moc_header_make_all:
+compiler_moc_header_clean:
+compiler_moc_source_make_all:
+compiler_moc_source_clean:
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
 compiler_yacc_impl_make_all:
@@ -496,10 +527,86 @@ compiler_clean:
 
 ####### Compile
 
-main.o: ../MNKConsoleTest/main.cpp ../MNKConsoleTest/consoletest.h
+main.o: ../MNKConsoleTest/main.cpp ../MNKConsoleTest/consoletest.h \
+		../MNKConsoleTest/ludecompose.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/QString \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qstring.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qchar.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qglobal.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qconfig.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qfeatures.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qtypetraits.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qisenum.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qsysinfo.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qlogging.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qflags.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qatomic.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qatomic_gcc.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qatomic_armv7.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qatomic_armv6.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qatomic_armv5.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qatomic_ia64.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qatomic_x86.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qatomic_unix.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qmutex.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qnumeric.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qversiontagging.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qbytearray.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qrefcount.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qnamespace.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qarraydata.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qstringbuilder.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../MNKConsoleTest/main.cpp
 
-consoletest.o: ../MNKConsoleTest/consoletest.cpp ../MNKConsoleTest/consoletest.h
+consoletest.o: ../MNKConsoleTest/consoletest.cpp ../MNKConsoleTest/consoletest.h \
+		../MNKConsoleTest/ludecompose.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/QString \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qstring.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qchar.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qglobal.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qconfig.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qfeatures.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qtypetraits.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qisenum.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qsysinfo.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qlogging.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qflags.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qatomic.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qatomic_gcc.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qatomic_armv7.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qatomic_armv6.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qatomic_armv5.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qatomic_ia64.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qatomic_x86.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qatomic_unix.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qmutex.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qnumeric.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qversiontagging.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qbytearray.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qrefcount.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qnamespace.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qarraydata.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qstringbuilder.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o consoletest.o ../MNKConsoleTest/consoletest.cpp
 
 ludecompose.o: ../MNKConsoleTest/ludecompose.cpp ../MNKConsoleTest/ludecompose.h

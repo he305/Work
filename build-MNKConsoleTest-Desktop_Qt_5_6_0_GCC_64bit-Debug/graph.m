@@ -9,7 +9,7 @@ y = data(:, 2);
 
 koff = data(:, 4);
 
-mnkX = linspace((min(x)*2), max(x)*2);
+mnkX = linspace((min(x)-10), max(x)+10);
 mnkY = [];
 i = 0;
 j = 1;

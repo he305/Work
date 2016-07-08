@@ -1,6 +1,7 @@
 #include <iostream>
 #include <math.h>
 #include "ludecompose.h"
+#include <QString>
 
 #ifndef CONSOLETEST_H
 #define CONSOLETEST_H
@@ -17,6 +18,7 @@ private:
     int size;
     double* x;
     double* y;
+    double* w;
     int polynomePower;
 };
 

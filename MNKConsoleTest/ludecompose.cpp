@@ -74,12 +74,6 @@ double* LUDecompose::lupSolve()
     y = forwardSub(a1, vector, p, size);
     x = backSub(a1, y, size);
 
-    std::cout << "P!!!!:\n";
-    for (int i = 0; i < size; i++)
-    {
-        std::cout << p[i] << "\n";
-    }
-
     return x;
 }
 
