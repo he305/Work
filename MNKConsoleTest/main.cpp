@@ -1,10 +1,13 @@
 #include <iostream>
-#include <consoletest.h>
+#include <addcalculationsthread.h>
+#include <QApplication>
 
 using namespace std;
 
 int main(int argc, char *argv[])
 {
-    ConsoleTest ct;
-    return 0;
+    QApplication app(argc, argv);
+    AddCalculationsThread solveThread;
+    solveThread.start();
+    return app.exec();
 }

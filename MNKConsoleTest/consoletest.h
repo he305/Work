@@ -2,6 +2,8 @@
 #include <math.h>
 #include "ludecompose.h"
 #include <QString>
+#include <time.h>
+#include <QThread>
 
 #ifndef CONSOLETEST_H
 #define CONSOLETEST_H
@@ -10,16 +12,24 @@
 class ConsoleTest
 {
 public:
-    ConsoleTest();
+    void run();
+    std::vector<double>* getX();
+    std::vector<double>* getY();
+    void setFlag(bool flag);
+    ConsoleTest(int size, int polynomePower, bool inputType);
     ~ConsoleTest();
 private:
     void solve();
     void initialize();
+    void handInput();
+    void autoInput();
     int size;
-    double* x;
-    double* y;
-    double* w;
+    std::vector<double>* x;
+    std::vector<double>* y;
+    std::vector<double>* w;
     int polynomePower;
+    bool flag;
+    bool inputType;
 };
 
 #endif // CONSOLETEST_H

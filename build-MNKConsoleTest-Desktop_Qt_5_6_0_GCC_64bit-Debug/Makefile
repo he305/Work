@@ -12,10 +12,10 @@ MAKEFILE      = Makefile
 
 CC            = gcc
 CXX           = g++
-DEFINES       = -DQT_QML_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB
+DEFINES       = -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -g -std=gnu++0x -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I../MNKConsoleTest -I. -I../../../Qt5.6.0/5.6/gcc_64/include -I../../../Qt5.6.0/5.6/gcc_64/include/QtGui -I../../../Qt5.6.0/5.6/gcc_64/include/QtCore -I. -I../../../Qt5.6.0/5.6/gcc_64/mkspecs/linux-g++
+INCPATH       = -I../MNKConsoleTest -I. -I../../../Qt5.6.0/5.6/gcc_64/include -I../../../Qt5.6.0/5.6/gcc_64/include/QtWidgets -I../../../Qt5.6.0/5.6/gcc_64/include/QtGui -I../../../Qt5.6.0/5.6/gcc_64/include/QtCore -I. -I../../../Qt5.6.0/5.6/gcc_64/mkspecs/linux-g++
 QMAKE         = /home/sergey/Qt5.6.0/5.6/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -36,7 +36,7 @@ DISTNAME      = MNKConsoleTest1.0.0
 DISTDIR = /home/sergey/Git/Work/build-MNKConsoleTest-Desktop_Qt_5_6_0_GCC_64bit-Debug/.tmp/MNKConsoleTest1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-z,origin -Wl,-rpath,\$$ORIGIN -Wl,-rpath,/home/sergey/Qt5.6.0/5.6/gcc_64/lib
-LIBS          = $(SUBLIBS) -L/home/sergey/Qt5.6.0/5.6/gcc_64/lib -lQt5Gui -lQt5Core -lGL -lpthread 
+LIBS          = $(SUBLIBS) -L/home/sergey/Qt5.6.0/5.6/gcc_64/lib -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -50,10 +50,12 @@ OBJECTS_DIR   = ./
 
 SOURCES       = ../MNKConsoleTest/main.cpp \
 		../MNKConsoleTest/consoletest.cpp \
-		../MNKConsoleTest/ludecompose.cpp 
+		../MNKConsoleTest/ludecompose.cpp \
+		../MNKConsoleTest/addcalculationsthread.cpp 
 OBJECTS       = main.o \
 		consoletest.o \
-		ludecompose.o
+		ludecompose.o \
+		addcalculationsthread.o
 DIST          = ../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/common/unix.conf \
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/common/linux.conf \
@@ -182,15 +184,18 @@ DIST          = ../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/resources.prf \
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/moc.prf \
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/unix/opengl.prf \
+		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/uic.prf \
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/unix/thread.prf \
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/testcase_targets.prf \
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/exceptions.prf \
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/yacc.prf \
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/lex.prf \
 		../MNKConsoleTest/MNKConsoleTest.pro ../MNKConsoleTest/consoletest.h \
-		../MNKConsoleTest/ludecompose.h ../MNKConsoleTest/main.cpp \
+		../MNKConsoleTest/ludecompose.h \
+		../MNKConsoleTest/addcalculationsthread.h ../MNKConsoleTest/main.cpp \
 		../MNKConsoleTest/consoletest.cpp \
-		../MNKConsoleTest/ludecompose.cpp
+		../MNKConsoleTest/ludecompose.cpp \
+		../MNKConsoleTest/addcalculationsthread.cpp
 QMAKE_TARGET  = MNKConsoleTest
 DESTDIR       = 
 TARGET        = MNKConsoleTest
@@ -330,12 +335,14 @@ Makefile: ../MNKConsoleTest/MNKConsoleTest.pro ../../../Qt5.6.0/5.6/gcc_64/mkspe
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/resources.prf \
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/moc.prf \
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/unix/opengl.prf \
+		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/uic.prf \
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/unix/thread.prf \
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/testcase_targets.prf \
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/exceptions.prf \
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/yacc.prf \
 		../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/lex.prf \
 		../MNKConsoleTest/MNKConsoleTest.pro \
+		../../../Qt5.6.0/5.6/gcc_64/lib/libQt5Widgets.prl \
 		../../../Qt5.6.0/5.6/gcc_64/lib/libQt5Gui.prl \
 		../../../Qt5.6.0/5.6/gcc_64/lib/libQt5Core.prl
 	$(QMAKE) -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug -o Makefile ../MNKConsoleTest/MNKConsoleTest.pro
@@ -467,12 +474,14 @@ Makefile: ../MNKConsoleTest/MNKConsoleTest.pro ../../../Qt5.6.0/5.6/gcc_64/mkspe
 ../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/resources.prf:
 ../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/moc.prf:
 ../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/unix/opengl.prf:
+../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/uic.prf:
 ../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/unix/thread.prf:
 ../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/testcase_targets.prf:
 ../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/exceptions.prf:
 ../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/yacc.prf:
 ../../../Qt5.6.0/5.6/gcc_64/mkspecs/features/lex.prf:
 ../MNKConsoleTest/MNKConsoleTest.pro:
+../../../Qt5.6.0/5.6/gcc_64/lib/libQt5Widgets.prl:
 ../../../Qt5.6.0/5.6/gcc_64/lib/libQt5Gui.prl:
 ../../../Qt5.6.0/5.6/gcc_64/lib/libQt5Core.prl:
 qmake: FORCE
@@ -489,8 +498,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../MNKConsoleTest/consoletest.h ../MNKConsoleTest/ludecompose.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../MNKConsoleTest/main.cpp ../MNKConsoleTest/consoletest.cpp ../MNKConsoleTest/ludecompose.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../MNKConsoleTest/consoletest.h ../MNKConsoleTest/ludecompose.h ../MNKConsoleTest/addcalculationsthread.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../MNKConsoleTest/main.cpp ../MNKConsoleTest/consoletest.cpp ../MNKConsoleTest/ludecompose.cpp ../MNKConsoleTest/addcalculationsthread.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -517,6 +526,8 @@ compiler_moc_header_make_all:
 compiler_moc_header_clean:
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
+compiler_uic_make_all:
+compiler_uic_clean:
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
 compiler_yacc_impl_make_all:
@@ -565,7 +576,83 @@ main.o: ../MNKConsoleTest/main.cpp ../MNKConsoleTest/consoletest.h \
 		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qrefcount.h \
 		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qnamespace.h \
 		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qarraydata.h \
-		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qstringbuilder.h
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/QThread \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qthread.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qobject.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qlist.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qalgorithms.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qiterator.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qpair.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qstringlist.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qregexp.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qcoreevent.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qmetatype.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qobject_impl.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtWidgets/QApplication \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtWidgets/qapplication.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qcoreapplication.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qeventloop.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qpoint.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qsize.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtGui/qcursor.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtWidgets/qwidget.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qmargins.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtGui/qpaintdevice.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qrect.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtGui/qpalette.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtGui/qcolor.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtGui/qrgb.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtGui/qrgba64.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtGui/qbrush.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qvector.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtGui/qmatrix.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtGui/qpolygon.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtGui/qregion.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qdatastream.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qiodevice.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qline.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtGui/qtransform.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtGui/qpainterpath.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtGui/qimage.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtGui/qpixelformat.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtGui/qpixmap.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qshareddata.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qhash.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtGui/qfont.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtGui/qfontmetrics.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtGui/qfontinfo.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtWidgets/qsizepolicy.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtGui/qkeysequence.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtGui/qevent.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qvariant.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qmap.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qdebug.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qtextstream.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qlocale.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qset.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qurl.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qurlquery.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qfile.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qfiledevice.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtGui/qvector2d.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtGui/qtouchdevice.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtGui/qguiapplication.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtGui/qinputmethod.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../MNKConsoleTest/main.cpp
 
 consoletest.o: ../MNKConsoleTest/consoletest.cpp ../MNKConsoleTest/consoletest.h \
@@ -606,11 +693,90 @@ consoletest.o: ../MNKConsoleTest/consoletest.cpp ../MNKConsoleTest/consoletest.h
 		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qrefcount.h \
 		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qnamespace.h \
 		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qarraydata.h \
-		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qstringbuilder.h
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/QThread \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qthread.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qobject.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qlist.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qalgorithms.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qiterator.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qpair.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qstringlist.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qregexp.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qcoreevent.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qmetatype.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qobject_impl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o consoletest.o ../MNKConsoleTest/consoletest.cpp
 
 ludecompose.o: ../MNKConsoleTest/ludecompose.cpp ../MNKConsoleTest/ludecompose.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ludecompose.o ../MNKConsoleTest/ludecompose.cpp
+
+addcalculationsthread.o: ../MNKConsoleTest/addcalculationsthread.cpp ../MNKConsoleTest/addcalculationsthread.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/QThread \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qthread.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qobject.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qnamespace.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qglobal.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qconfig.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qfeatures.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qtypetraits.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qisenum.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qsysinfo.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qlogging.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qflags.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qatomic.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qatomic_gcc.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qatomic_armv7.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qatomic_armv6.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qatomic_armv5.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qatomic_ia64.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qatomic_x86.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qatomic_unix.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qmutex.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qnumeric.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qversiontagging.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qstring.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qchar.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qbytearray.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qrefcount.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qarraydata.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qlist.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qalgorithms.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qiterator.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qpair.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qstringlist.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qregexp.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qcoreevent.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qmetatype.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../Qt5.6.0/5.6/gcc_64/include/QtCore/qobject_impl.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o addcalculationsthread.o ../MNKConsoleTest/addcalculationsthread.cpp
 
 ####### Install
 

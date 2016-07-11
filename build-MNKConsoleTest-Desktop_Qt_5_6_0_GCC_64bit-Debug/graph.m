@@ -7,9 +7,12 @@ disp(data);
 x = data(:, 1);
 y = data(:, 2);
 
-koff = data(:, 4);
+data = dlmread('koff.csv');
 
-mnkX = linspace((min(x)-10), max(x)+10);
+koff = data(:, 1);
+
+#mnkX = linspace(min(x), x(length(x)-1) + 5);
+mnkX = linspace(x(length(x)-4) - 5, x(length(x)) + 5);
 mnkY = [];
 i = 0;
 j = 1;

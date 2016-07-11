@@ -5,41 +5,73 @@ using namespace std;
 
 void ConsoleTest::initialize()
 {
-    cout << "Введите общее количество точек: ";
-    cin >> size;
-    x = new double[size];
-    y = new double[size];
-    w = new double[size];
+    system("clear");
+    cout << "Полученные данные:\n";
+    for (int i = 0; i < size; i++)
+    {
+        cout << x->at(i) << "\t" << y->at(i) << "\t" << w->at(i) << "\n";
+    }
 
+    cout << "Введите степень полинома: ";
+    //cin >> polynomePower;
+}
+
+void ConsoleTest::handInput()
+{
+    x->clear();
+    y->clear();
+    w->clear();
+
+    double znach;
     cout << "Введите значения X\n";
     for (int i = 0; i < size; i++)
     {
         cout << "X[" << i << "] = ";
-        cin >> x[i];
+        cin >> znach;
+        x->push_back(znach);
     }
 
     cout << "Введите значения Y\n";
     for (int i = 0; i < size; i++)
     {
         cout << "Y[" << i << "] = ";
-        cin >> y[i];
+        cin >> znach;
+        y->push_back(znach);
     }
+
     cout << "Введите веса W\n";
     for (int i = 0; i < size; i++)
     {
         cout << "w[" << i << "] = ";
-        cin >> w[i];
+        cin >> znach;
+        w->push_back(znach);
     }
+}
 
-    system("clear");
-    cout << "Полученные данные:\n";
+void ConsoleTest::autoInput()
+{
+    srand(time(0));
     for (int i = 0; i < size; i++)
     {
-        cout << x[i] << "\t" << y[i] << "\n";
+        if (i == 0)
+        {
+            x->at(i) = rand() % 30 - 15;
+        }
+        else
+        {
+            x->at(i) = (rand() % 3 + 1) + x->at(i-1);
+        }
+
+        y->at(i) = x->at(i) * (rand() % 4 - 2);
     }
 
-    cout << "Введите степень полинома: ";
-    cin >> polynomePower;
+    double h = 1/double(size); //Шаг вычисления весов
+    cout << "Шаг: " << h << "\n";
+
+    for (int i = 0; i < size; i++)
+    {
+        w->at(i)= 1;
+    }
 }
 
 void ConsoleTest::solve()
@@ -58,10 +90,10 @@ void ConsoleTest::solve()
     {
         for (int j = 0; j < polynomePower+1; j++)
         {
-            int sum = 0;
+            double sum = 0;
             for (int k = 0; k < size; k++)
             {
-                sum += pow(x[k], i+j) * w[k];
+                sum += pow(x->at(k), i+j) * w->at(k);
                 cout << i << ":" << j << ":" << k << ":" <<sum << "\n";
             }
             a[i][j] = sum;
@@ -83,10 +115,10 @@ void ConsoleTest::solve()
     double* z = new double[polynomePower+1];
     for (int i = 0; i < polynomePower+1; i++)
     {
-        int sum = 0;
+        double sum = 0;
         for (int j = 0; j < size; j++)
         {
-            sum += pow(x[j], i) * y[j] * w[j];
+            sum += pow(x->at(j), i) * y->at(j) * w->at(j);
         }
         z[i] = sum;
     }
@@ -103,7 +135,7 @@ void ConsoleTest::solve()
     cout << "\n\nРешение: ";
     for (int i = polynomePower; i >= 0; i--)
     {
-        if (fabs(answer[i]) < 0.0001)
+        if (fabs(answer[i]) < 0.0000001)
             answer[i] = 0;
 
         if (i == 0)
@@ -129,31 +161,74 @@ void ConsoleTest::solve()
 
     ofstream dataBase;
 
-    dataBase.open("data.csv");
-
-    for (int i = 0; i < size; i++)
+    if (flag)
     {
-        dataBase << x[i] << ";" << y[i] << ";" << w[i] << ";" << answer[i];
-        if (i == 0)
+        dataBase.open("data.csv", ios_base::app);
+        dataBase << x->at(x->size()-1) << ";" << y->at(y->size()-1) << endl;
+    }
+    else
+    {
+        dataBase.open("data.csv");
+        for (int i = 0; i < x->size(); i++)
         {
+            dataBase << x->at(i) << ";" << y->at(i) << endl;
         }
-
-        dataBase << std::endl;
     }
 
     dataBase.close();
+
+    dataBase.open("koff.csv");
+    for (int i = 0; i < polynomePower+1; i++)
+    {
+        dataBase << answer[i] << std::endl;
+    }
 }
 
-ConsoleTest::ConsoleTest()
+void ConsoleTest::run()
 {
-    cout << "Консольная версия программы апроксимации функции методом наименьших "
-            "квадратов полиномом\n";
+    if (inputType)
+    {
+        autoInput();
+    }
+    else
+    {
+        handInput();
+    }
+
     initialize();
+
     solve();
+}
+
+std::vector<double>* ConsoleTest::getX()
+{
+    return x;
+}
+
+std::vector<double>* ConsoleTest::getY()
+{
+    return y;
+}
+
+ConsoleTest::ConsoleTest(int size, int polynomePower, bool inputType)
+{
+    this->size = size;
+    this->polynomePower = polynomePower;
+    flag = false;
+    x = new vector<double>(size);
+    y = new vector<double>(size);
+    w = new vector<double>(size);
+    this->inputType = inputType;
 }
 
 ConsoleTest::~ConsoleTest()
 {
     delete x;
     delete y;
+    delete w;
+}
+
+void ConsoleTest::setFlag(bool flag)
+{
+    this->flag = flag;
 }
