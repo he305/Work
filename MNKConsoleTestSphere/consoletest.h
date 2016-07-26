@@ -17,7 +17,7 @@ public:
     std::vector<double>* getY();
     std::vector<double>* getZ();
     void setFlag(bool flag);
-    ConsoleTest(int size, int polynomePower, bool inputType);
+    ConsoleTest(int size, int* matSize, bool inputType);
     ~ConsoleTest();
 private:
     void solve();
@@ -29,7 +29,7 @@ private:
     std::vector<double>* y;
     std::vector<double>* z;
     std::vector<double>* w;
-    int polynomePower;
+    int* polynomeSize;
     bool flag;
     bool inputType;
 };

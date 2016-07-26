@@ -87,19 +87,20 @@ void ConsoleTest::solve()
     double** koords = new double*[rows];
     for (int i = 0; i < rows; i++)
     {
-        koords[i] = new double[size];
+        koords[i] = new double[size+1];
+        cout << koords[i][size];
         for (int j = 0; j < size; j++)
         {
             switch(i)
             {
                 case 0:
-                    koords[i][j] = 1;
-                    break;
-                case 1:
                     koords[i][j] = x->at(j);
                     break;
-                case 2:
+                case 1:
                     koords[i][j] = y->at(j);
+                    break;
+                case 2:
+                    koords[i][j] = 1;
                     break;
                 case 3:
                     koords[i][j] = z->at(j);
@@ -107,11 +108,15 @@ void ConsoleTest::solve()
             }
         }
     }
+    koords[0][size] = polynomeSize[0];
+    koords[1][size] = polynomeSize[1];
+    koords[2][size] = 1;
+    koords[3][size] = 1;
 
     cout << "Сформированная матрица\n";
     for (int i = 0; i < rows; i++)
     {
-        for (int j = 0; j < size; j++)
+        for (int j = 0; j < size+1; j++)
         {
             cout << koords[i][j] << "\t";
         }
@@ -119,77 +124,81 @@ void ConsoleTest::solve()
     }
 
     double** a;
-    a = new double *[polynomePower+2];
-    for (int i = 0; i < polynomePower+2; i++)
+    const int matSize = 3;
+    a = new double *[matSize];
+    for (int i = 0; i < matSize; i++)
     {
-        a[i] = new double[polynomePower+2];
+        a[i] = new double[matSize];
     }
 
 
+    int indexFromBehind = rows-2;
     //Old version: a(i,j) = sum(k->size)(xi^(polynomePower-i+1)*xi^(polynomePower-j+1))
     //New version: a(i,j) = sum(k->size)(xk^(i+j))
     //Weight version a(i, j) = sum(k->size)(xk^(i+j) * wk)
     //Sphere version a(i, j) = sum(k->size)(koords[j][k] * koords[i][k] * wk)
-    for (int i = 0; i < polynomePower+2; i++)
+    for (int i = 0; i < matSize; i++)
     {
-        int fromTheEndKoords = polynomePower+1;
-        for (int j = 0; j < polynomePower+2; j++)
+        for (int j = 0; j < matSize; j++)
         {
             double sum = 0;
             for (int k = 0; k < size; k++)
             {
-                sum += koords[fromTheEndKoords][k] * koords[i][k] * w->at(k);
-                cout << "sum[" << i << "][" << j << "] = " << sum << "\t" << koords[fromTheEndKoords][k] << "\n";
+                sum += pow(koords[j][k], koords[j][size])
+                        * pow(koords[indexFromBehind][k], koords[indexFromBehind][size]) * w->at(k);
+                cout << "sum[" << i << "][" << j << "] = " << sum << "\t" << koords[j][k] << "\n";
             }
             a[i][j] = sum;
-            fromTheEndKoords--;
         }
+        indexFromBehind--;
     }
 
     cout << "Матрица А\n";
-    for (int i = 0; i < polynomePower+2; i++)
+    for (int i = 0; i < matSize; i++)
     {
-        for (int j = 0; j < polynomePower+2; j++)
+        for (int j = 0; j < matSize; j++)
         {
             cout << a[i][j] << "\t";
         }
         cout << "\n";
     }
 
+    indexFromBehind = rows-2;
     //Old version: zi = sum(j->size)(xj^(polynomePower-i+1)*yj)
     //New version: zi = sum(j->size)(xj^i*yj)
     //Weight verison zi = sum(j->size)(xj^i * yj * wj)
     //Sphere version zi = sum(j->size)(koords[3][j] * koords[i][j])
-    double* z = new double[polynomePower+2];
-    for (int i = 0; i < polynomePower+2; i++)
+    double* z = new double[matSize];
+    for (int i = 0; i < matSize; i++)
     {
         double sum = 0;
         for (int j = 0; j < size; j++)
         {
-            sum += koords[3][j] * koords[i][j];
+            sum += koords[3][j] * pow(koords[indexFromBehind][j], koords[indexFromBehind][size]);
         }
         z[i] = sum;
+        indexFromBehind--;
     }
 
 
     cout << "Правый вектор:\n";
-    for (int i = 0; i < polynomePower+2; i++)
+    for (int i = 0; i < matSize; i++)
     {
         cout << z[i] << "\n";
     }
 
-    LUDecompose* lu = new LUDecompose(a, z, polynomePower+2);
+    LUDecompose* lu = new LUDecompose(a, z, matSize);
     double* answer = lu->lupSolve();
 
     cout << "\n\n";
-    for (int i = 0; i < polynomePower+2; i++)
+    for (int i = 0; i < matSize; i++)
     {
         cout << answer[i] << "\n";
     }
     return;
 
     cout << "\n\nРешение: ";
-    for (int i = polynomePower+1; i >= 0; i--)
+    for (int i = matSize-1; i >= 0; i--)
     {
         if (fabs(answer[i]) < 0.0000001)
             answer[i] = 0;
@@ -234,7 +243,7 @@ void ConsoleTest::solve()
     dataBase.close();
 
     dataBase.open("koff.csv");
-    for (int i = 0; i < polynomePower+1; i++)
+    for (int i = 0; i < matSize; i++)
     {
         dataBase << answer[i] << std::endl;
     }
@@ -271,10 +280,10 @@ std::vector<double>* ConsoleTest::getZ()
     return z;
 }
 
-ConsoleTest::ConsoleTest(int size, int polynomePower, bool inputType)
+ConsoleTest::ConsoleTest(int size, int* polynomeSize, bool inputType)
 {
     this->size = size;
-    this->polynomePower = polynomePower;
+    this->polynomeSize = polynomeSize;
     flag = false;
     x = new vector<double>(size);
     y = new vector<double>(size);

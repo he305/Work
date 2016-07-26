@@ -11,8 +11,11 @@ void AddCalculationsThread::run()
     cin >> size;
     cout << "Введите степень полинома: ";
 
-    int polynomePower;
-    cin >> polynomePower;
+    int* polynomePower = new int(2);
+    for (int i = 0; i < 2; i++)
+    {
+        cin >> polynomePower[i];
+    }
 
     cout << "Метод ввода\n0-ручной\n1-авто\n";
     int choose;
