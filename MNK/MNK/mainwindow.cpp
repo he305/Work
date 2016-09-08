@@ -144,8 +144,26 @@ void MainWindow::on_mnk_button_clicked()
     }
 
     int *polynomeSize = new int[2];
-    polynomeSize[0] = 1;
-    polynomeSize[1] = 1;
+    int polNumber = ui->polynomeBox->currentIndex();
+    switch(polNumber)
+    {
+    case 0:
+        polynomeSize[0] = 1;
+        polynomeSize[1] = 1;
+        break;
+    case 1:
+        polynomeSize[0] = 1;
+        polynomeSize[1] = 2;
+        break;
+    case 2:
+        polynomeSize[0] = 2;
+        polynomeSize[1] = 1;
+        break;
+    case 3:
+        polynomeSize[0] = 2;
+        polynomeSize[1] = 2;
+    }
+
     MNK *mnk = new MNK(x, y, z, w, size, polynomeSize);
     results = mnk->calculate();
 
@@ -154,10 +172,13 @@ void MainWindow::on_mnk_button_clicked()
     {
         resultLine[i] = new QLineEdit();
         resultLine[i]->setAlignment(Qt::AlignCenter);
-        resultLine[i]->setText(QString::number(results[i]));
+
+        QString resultString = char(i+97) + QString::fromUtf8(" = ") + QString::number(results[i]);
+        resultLine[i]->setText(resultString);
         ui->resLayout->addWidget(resultLine[i]);
     }
     ui->inbaseButton->setEnabled(true);
+    delete polynomeSize;
 }
 
 void MainWindow::on_outbaseButton_clicked()
@@ -199,10 +220,11 @@ void MainWindow::on_inbaseButton_clicked()
 
     for (int i = 0; i < size; i++)
     {
-        dataBase << x[i] << ";" << y[i] << ";" << w[i];
         if (i == 0)
         {
+            dataBase << "X" << ";" << "Y" << ";" << "Z" << ";" << "W" << std::endl;
         }
+        dataBase << x[i] << ";" << y[i] << ";" << z[i] << ";" << w[i];
 
         dataBase << std::endl;
     }

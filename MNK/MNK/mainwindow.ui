@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>477</width>
-    <height>461</height>
+    <width>530</width>
+    <height>455</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -55,7 +55,7 @@
    <widget class="QLabel" name="yLabel">
     <property name="geometry">
      <rect>
-      <x>100</x>
+      <x>120</x>
       <y>40</y>
       <width>20</width>
       <height>20</height>
@@ -71,7 +71,7 @@
    <widget class="QPushButton" name="mnk_button">
     <property name="geometry">
      <rect>
-      <x>340</x>
+      <x>400</x>
       <y>10</y>
       <width>121</width>
       <height>31</height>
@@ -86,7 +86,7 @@
      <rect>
       <x>10</x>
       <y>60</y>
-      <width>61</width>
+      <width>71</width>
       <height>391</height>
      </rect>
     </property>
@@ -95,9 +95,9 @@
    <widget class="QWidget" name="verticalLayoutWidget_2">
     <property name="geometry">
      <rect>
-      <x>80</x>
+      <x>90</x>
       <y>60</y>
-      <width>61</width>
+      <width>71</width>
       <height>391</height>
      </rect>
     </property>
@@ -106,8 +106,8 @@
    <widget class="QLabel" name="sLabel">
     <property name="geometry">
      <rect>
-      <x>240</x>
-      <y>40</y>
+      <x>280</x>
+      <y>30</y>
       <width>20</width>
       <height>20</height>
      </rect>
@@ -119,9 +119,9 @@
    <widget class="QWidget" name="verticalLayoutWidget_3">
     <property name="geometry">
      <rect>
-      <x>220</x>
+      <x>250</x>
       <y>60</y>
-      <width>61</width>
+      <width>83</width>
       <height>391</height>
      </rect>
     </property>
@@ -130,7 +130,7 @@
    <widget class="QWidget" name="verticalLayoutWidget_4">
     <property name="geometry">
      <rect>
-      <x>300</x>
+      <x>350</x>
       <y>360</y>
       <width>171</width>
       <height>91</height>
@@ -171,7 +171,7 @@
    <widget class="QLabel" name="zLabel">
     <property name="geometry">
      <rect>
-      <x>180</x>
+      <x>200</x>
       <y>40</y>
       <width>16</width>
       <height>18</height>
@@ -184,7 +184,7 @@
    <widget class="QWidget" name="verticalLayoutWidget_5">
     <property name="geometry">
      <rect>
-      <x>150</x>
+      <x>170</x>
       <y>60</y>
       <width>61</width>
       <height>391</height>
@@ -195,13 +195,56 @@
    <widget class="QWidget" name="verticalLayoutWidget_6">
     <property name="geometry">
      <rect>
-      <x>350</x>
+      <x>410</x>
       <y>50</y>
       <width>111</width>
       <height>281</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="resLayout"/>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>0</y>
+      <width>59</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Полином</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="polynomeBox">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>20</y>
+      <width>81</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>x + y</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>x + y^2</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>x^2 + y</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>x^2 + y^2</string>
+     </property>
+    </item>
    </widget>
   </widget>
  </widget>

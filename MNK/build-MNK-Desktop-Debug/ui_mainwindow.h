@@ -13,6 +13,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
@@ -51,6 +52,8 @@ public:
     QVBoxLayout *zLayout;
     QWidget *verticalLayoutWidget_6;
     QVBoxLayout *resLayout;
+    QLabel *label;
+    QComboBox *polynomeBox;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -90,7 +93,7 @@ public:
         mnk_button->setGeometry(QRect(340, 10, 121, 31));
         verticalLayoutWidget = new QWidget(centralWidget);
         verticalLayoutWidget->setObjectName(QStringLiteral("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(10, 60, 61, 391));
+        verticalLayoutWidget->setGeometry(QRect(10, 60, 83, 391));
         xLayout = new QVBoxLayout(verticalLayoutWidget);
         xLayout->setSpacing(6);
         xLayout->setContentsMargins(11, 11, 11, 11);
@@ -109,7 +112,7 @@ public:
         sLabel->setGeometry(QRect(240, 40, 20, 20));
         verticalLayoutWidget_3 = new QWidget(centralWidget);
         verticalLayoutWidget_3->setObjectName(QStringLiteral("verticalLayoutWidget_3"));
-        verticalLayoutWidget_3->setGeometry(QRect(220, 60, 61, 391));
+        verticalLayoutWidget_3->setGeometry(QRect(220, 60, 83, 391));
         sLayout = new QVBoxLayout(verticalLayoutWidget_3);
         sLayout->setSpacing(6);
         sLayout->setContentsMargins(11, 11, 11, 11);
@@ -154,12 +157,18 @@ public:
         zLayout->setContentsMargins(0, 0, 0, 0);
         verticalLayoutWidget_6 = new QWidget(centralWidget);
         verticalLayoutWidget_6->setObjectName(QStringLiteral("verticalLayoutWidget_6"));
-        verticalLayoutWidget_6->setGeometry(QRect(400, 50, 61, 281));
+        verticalLayoutWidget_6->setGeometry(QRect(350, 50, 111, 281));
         resLayout = new QVBoxLayout(verticalLayoutWidget_6);
         resLayout->setSpacing(6);
         resLayout->setContentsMargins(11, 11, 11, 11);
         resLayout->setObjectName(QStringLiteral("resLayout"));
         resLayout->setContentsMargins(0, 0, 0, 0);
+        label = new QLabel(centralWidget);
+        label->setObjectName(QStringLiteral("label"));
+        label->setGeometry(QRect(260, 0, 59, 18));
+        polynomeBox = new QComboBox(centralWidget);
+        polynomeBox->setObjectName(QStringLiteral("polynomeBox"));
+        polynomeBox->setGeometry(QRect(250, 20, 81, 32));
         MainWindow->setCentralWidget(centralWidget);
 
         retranslateUi(MainWindow);
@@ -178,6 +187,14 @@ public:
         outbaseButton->setText(QApplication::translate("MainWindow", "\320\237\320\276\320\273\321\203\321\207\320\270\321\202\321\214 \320\270\320\267 \321\202\320\260\320\261\320\273\320\270\321\206\321\213", 0));
         inbaseButton->setText(QApplication::translate("MainWindow", "\320\227\320\260\320\275\320\265\321\201\321\202\320\270 \320\262 \321\202\320\260\320\261\320\273\320\270\321\206\321\203", 0));
         zLabel->setText(QApplication::translate("MainWindow", "Z", 0));
+        label->setText(QApplication::translate("MainWindow", "\320\237\320\276\320\273\320\270\320\275\320\276\320\274", 0));
+        polynomeBox->clear();
+        polynomeBox->insertItems(0, QStringList()
+         << QApplication::translate("MainWindow", "x + y", 0)
+         << QApplication::translate("MainWindow", "x + y^2", 0)
+         << QApplication::translate("MainWindow", "x^2 + y", 0)
+         << QApplication::translate("MainWindow", "x^2 + y^2", 0)
+        );
     } // retranslateUi
 
 };

@@ -264,7 +264,7 @@ void check(float** a, float* b, float* x, int size)
 
 int main()
 {
-    int size = 3;
+    int size = 2;
     float** a = createMatrix(size);
     float b[size];
     float* x;

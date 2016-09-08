@@ -76,7 +76,6 @@ double* MNK::calculate()
         a[i] = new double[matSize];
     }
 
-
     int indexFromBehind = rows-2;
     //Old version: a(i,j) = sum(k->size)(xi^(polynomePower-i+1)*xi^(polynomePower-j+1))
     //New version: a(i,j) = sum(k->size)(xk^(i+j))
@@ -90,12 +89,17 @@ double* MNK::calculate()
             for (int k = 0; k < size; k++)
             {
                 sum += pow(koords[j][k], koords[j][size])
-                        * pow(koords[indexFromBehind][k], koords[indexFromBehind][size]) * w->at(k);
+                       * pow(koords[indexFromBehind][k], koords[indexFromBehind][size])
+                       * w->at(k);
             }
             a[i][j] = sum;
         }
         indexFromBehind--;
     }
+
+    //Bug probably in index
+
+
 
     indexFromBehind = rows-2;
     //Old version: zi = sum(j->size)(xj^(polynomePower-i+1)*yj)
