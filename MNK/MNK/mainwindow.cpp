@@ -14,10 +14,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     xLine = nullptr;
     yLine = nullptr;
+    zLine = nullptr;
     sLine = nullptr;
+    resultLine = nullptr;
 
     x = nullptr;
     y = nullptr;
+    z = nullptr;
     w = nullptr;
     ui->inbaseButton->setEnabled(false);
     ui->outbaseButton->setEnabled(false);
@@ -51,54 +54,85 @@ void MainWindow::on_nEdit_textChanged(const QString &arg1)
             delete item;
         }
 
+        while ((item = ui->zLayout->layout()->takeAt(0))!= NULL)
+        {
+            delete item->widget();
+            delete item;
+        }
+
 
         while ((item = ui->sLayout->layout()->takeAt(0))!= NULL)
         {
             delete item->widget();
             delete item;
         }
+
+        while ((item = ui->resLayout->layout()->takeAt(0))!= NULL)
+        {
+            delete item->widget();
+            delete item;
+        }
+
         delete[] xLine;
         delete[] yLine;
+        delete[] zLine;
         delete[] sLine;
+        delete[] resultLine;
     }
     /*==========================================================*/
 
-    size = arg1.toInt();
+    size = ui->nEdit->text().toInt();
 
     xLine = new QLineEdit *[size];
     yLine = new QLineEdit *[size];
+    zLine = new QLineEdit *[size];
     sLine = new QLineEdit *[size];
     for (int i = 0; i < size; i++)
     {
         xLine[i] = new QLineEdit();
         yLine[i] = new QLineEdit();
+        zLine[i] = new QLineEdit();
         sLine[i] = new QLineEdit();
 
         xLine[i]->setAlignment(Qt::AlignCenter);
         yLine[i]->setAlignment(Qt::AlignCenter);
+        zLine[i]->setAlignment(Qt::AlignCenter);
         sLine[i]->setAlignment(Qt::AlignCenter);
 
         xLine[i]->setText(QString::number(0));
-        yLine[i]->setText(QString::number(0));
+        yLine[i]->setText(QString::number(0));       
+        zLine[i]->setText(QString::number(0));
         sLine[i]->setText(QString::number(1));
 
         ui->xLayout->addWidget(xLine[i]);
         ui->yLayout->addWidget(yLine[i]);
+        ui->zLayout->addWidget(zLine[i]);
         ui->sLayout->addWidget(sLine[i]);
     }
 }
 
 void MainWindow::on_mnk_button_clicked()
 {
-    if (x != nullptr || y != nullptr || w != nullptr)
+
+    QLayoutItem* item;
+    while ((item = ui->resLayout->layout()->takeAt(0))!= NULL)
+    {
+        delete item->widget();
+        delete item;
+    }
+    delete[] resultLine;
+
+    if (x != nullptr || y != nullptr || w != nullptr || z != nullptr)
     {
         delete[] x;
         delete[] y;
+        delete[] z;
         delete[] w;
     }
 
     x = new double[size];
     y = new double[size];
+    z = new double[size];
     w = new double[size];
 
     for (int i = 0; i < size; i++)
@@ -106,13 +140,23 @@ void MainWindow::on_mnk_button_clicked()
         w[i] = sLine[i]->text().toDouble();
         x[i] = xLine[i]->text().toDouble();
         y[i] = yLine[i]->text().toDouble();
+        z[i] = zLine[i]->text().toDouble();
     }
 
-    MNK *mnk = new MNK(x, y, w, size);
-    a = mnk->getA();
-    b = mnk->getB();
-    ui->aXAnswer->setText(QString::number(a));
-    ui->bXAnswer->setText(QString::number(b));
+    int *polynomeSize = new int[2];
+    polynomeSize[0] = 1;
+    polynomeSize[1] = 1;
+    MNK *mnk = new MNK(x, y, z, w, size, polynomeSize);
+    results = mnk->calculate();
+
+    resultLine = new QLineEdit *[3];
+    for (int i = 0; i < 3; i++)
+    {
+        resultLine[i] = new QLineEdit();
+        resultLine[i]->setAlignment(Qt::AlignCenter);
+        resultLine[i]->setText(QString::number(results[i]));
+        ui->resLayout->addWidget(resultLine[i]);
+    }
     ui->inbaseButton->setEnabled(true);
 }
 
@@ -158,7 +202,6 @@ void MainWindow::on_inbaseButton_clicked()
         dataBase << x[i] << ";" << y[i] << ";" << w[i];
         if (i == 0)
         {
-            dataBase << ";" << a << ";" << b;
         }
 
         dataBase << std::endl;

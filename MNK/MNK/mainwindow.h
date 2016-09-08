@@ -35,14 +35,17 @@ private:
     Ui::MainWindow *ui;
     QLineEdit **xLine;
     QLineEdit **yLine;
+    QLineEdit **zLine;
     QLineEdit **sLine;
+    QLineEdit **resultLine;
+
 
     double *x;
     double *y;
+    double *z;
     double *w;
 
-    double a;
-    double b;
+    double *results;
 
     int size;
     int prevSize;

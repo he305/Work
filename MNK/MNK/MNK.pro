@@ -16,10 +16,10 @@ CONFIG += c++11
 SOURCES += main.cpp\
         mainwindow.cpp \
     mnk.cpp \
-    matrix.cpp
+    ludecompose.cpp
 
 HEADERS  += mainwindow.h \
     mnk.h \
-    matrix.h
+    ludecompose.h
 
 FORMS    += mainwindow.ui
