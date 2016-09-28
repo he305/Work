@@ -102,7 +102,7 @@ void MainWindow::on_nEdit_textChanged(const QString &arg1)
         sLine[i]->setAlignment(Qt::AlignCenter);
 
         xLine[i]->setText(QString::number(0));
-        yLine[i]->setText(QString::number(0));       
+        yLine[i]->setText(QString::number(0));
         zLine[i]->setText(QString::number(0));
         sLine[i]->setText(QString::number(1));
 
