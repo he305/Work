@@ -21,4 +21,5 @@ HEADERS  += mainwindow.h \
     ludecompose.h \
     mnk.h
 
-FORMS    += mainwindow.ui
+FORMS    += \
+    mainwindow.ui
