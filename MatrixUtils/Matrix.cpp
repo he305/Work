@@ -110,7 +110,7 @@ Matrix<TYPE>* Matrix<TYPE>::product(Matrix* b)
 }
 
 template<class TYPE>
-void Matrix<TYPE>::kroneckerProduct(Matrix* b)
+Matrix<TYPE>* Matrix<TYPE>::kroneckerProduct(Matrix* b)
 {
   int* newSize = new int[2];
   newSize[0] = this->getSize()[0] * b->getSize()[0];
@@ -154,15 +154,23 @@ void Matrix<TYPE>::kroneckerProduct(Matrix* b)
     newMatrix[i] = new TYPE[newSize[1]];
   }
 
+
   for (int i = 0, k = 0; i < newSize[0]; i++)
   {
     for (int j = 0; j < newSize[1]; j++)
     {
+      if (j == 0 && k != 0)
+        k--;
       newMatrix[i][j] = blockMatrix[k][i][j];
-
-
+      if (j % b->getSize()[1] == 0)
+      {
+        k++;
+      }
     }
-    if
+    if (i % b->getSize()[0] == 0)
+    {
+      k++;
+    }
   }
 
   //mn x pq
@@ -179,7 +187,7 @@ void Matrix<TYPE>::kroneckerProduct(Matrix* b)
   }
 */
 
-  //return new Matrix(newMatrix, newSize[0], newSize[1]);
+  return new Matrix(newMatrix, newSize[0], newSize[1]);
 }
 
 template<class TYPE>

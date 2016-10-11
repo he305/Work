@@ -38,7 +38,8 @@ int main()
   cout << '\n';
   mat2->printMatrix();
   cout << '\n';
-  mat1->kroneckerProduct(mat2);
+  Matrix<double>* mat3 = mat1->kroneckerProduct(mat2);
+  mat3->printMatrix();
 
   return 0;
 }

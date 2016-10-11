@@ -13,7 +13,7 @@ public:
 
   Matrix* sum(Matrix* b);
   Matrix* product(Matrix* b);
-  void kroneckerProduct(Matrix* b);
+  Matrix* kroneckerProduct(Matrix* b);
 
   int* getSize();
   TYPE** getMatrix();
