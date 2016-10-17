@@ -9,7 +9,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
 
     qDebug() << qApp->applicationDirPath();
-    this->setFixedSize(477, 461);
     ui->setupUi(this);
     ui->nEdit->setAlignment(Qt::AlignRight);
 
