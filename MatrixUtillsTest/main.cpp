@@ -7,6 +7,8 @@ int main()
 {
     int N;
     cin >> N;
+    int M;
+    cin >> M;
     double** a = new double *[N];
     for (int i = 0; i < N; i++)
     {
@@ -16,11 +18,11 @@ int main()
             cin >> a[i][j];
         }
     }
-    double** b = new double *[N];
-    for (int i = 0; i < N; i++)
+    double** b = new double *[M];
+    for (int i = 0; i < M; i++)
     {
-        b[i] = new double[N];
-        for (int j = 0; j < N; j++)
+        b[i] = new double[M];
+        for (int j = 0; j < M; j++)
         {
             cin >> b[i][j];
         }
@@ -37,9 +39,9 @@ int main()
 
     cout << "\n\n";
 
-    for (int i = 0; i < N; i++)
+    for (int i = 0; i < M; i++)
     {
-        for (int j = 0; j < N; j++)
+        for (int j = 0; j < M; j++)
         {
             cout << b[i][j] << '\t';
         }
@@ -50,7 +52,7 @@ int main()
 
 
     Matrix<double>* mat1 = new Matrix<double>(a, N, N);
-    Matrix<double>* mat2 = new Matrix<double>(b, N, N);
+    Matrix<double>* mat2 = new Matrix<double>(b, M, M);
 
     mat1->kroneckerProduct(mat2)->printMatrix();
 

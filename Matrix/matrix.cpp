@@ -140,13 +140,25 @@ Matrix<TYPE>* Matrix<TYPE>::kroneckerProduct(Matrix* b)
         for (int j = 0; j < b->getSize()[1]; j++)
         {
           blockMatrix[block][i][j] = this->getMatrix()[l][k] * b->getMatrix()[i][j];
-          std::cout << blockMatrix[k][i][j] << '\t';
         }
-        std::cout << "\n";
       }
-      std::cout << "\n\n";
       block++;
     }
+  }
+
+  std::cout << "\nNow matrixes go\n";
+
+  for (int k = 0; k < nBlockMatrix; k++)
+  {
+      for (int i = 0; i < b->getSize()[0]; i++)
+      {
+          for (int j = 0; j < b->getSize()[1]; j++)
+          {
+              std::cout << blockMatrix[k][i][j] << "\t";
+          }
+          std::cout << '\n';
+      }
+      std::cout << "\n\n";
   }
 
   TYPE** newMatrix = new TYPE*[newSize[0]];
@@ -160,20 +172,27 @@ Matrix<TYPE>* Matrix<TYPE>::kroneckerProduct(Matrix* b)
   //TODO: доработай эту дрисню
   //      я знаю тебе хочется это стереть, но чувак, ты должен её доделать,
   //      проблема только с блоками ссаными
+
+  //UPD: done! проверка для 2 одинаковых матриц 2х2 и
+  //     для матриц 2х2 и 3х3
+  //TODO: проверка для неквадратных матриц
   int l = 0;
   int k = 0;
   block = 0;
 
+
   for (int i = 0; i < newSize[0]; i++)
   {
-      if (k >= b->getSize()[0])
+      if (k >= b->getSize()[0] && i != newSize[0] - 1)
       {
           k = 0;
-          block++;
+          block += 2;
       }
+
+      l = 0;
       for (int j = 0; j < newSize[1]; j++)
       {
-          if (l >= b->getSize()[1])
+          if (l >= b->getSize()[1] && j != newSize[1] - 1)
           {
               l = 0;
               block++;
