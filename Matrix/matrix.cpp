@@ -3,7 +3,6 @@
 #include <math.h>
 
 template class Matrix<double>;
-template class Matrix<int>;
 
 template<class TYPE>
 Matrix<TYPE>::~Matrix()
@@ -110,6 +109,14 @@ Matrix<TYPE>* Matrix<TYPE>::product(Matrix* b)
   return new Matrix(newMatrix, newSize[0], newSize[1]);
 }
 
+//TODO: доработай эту дрисню
+//      я знаю тебе хочется это стереть, но чувак, ты должен её доделать,
+//      проблема только с блоками ссаными
+
+//UPD: done! проверка для 2 одинаковых матриц 2х2 и
+//     для матриц 2х2 и 3х3
+//TODO: проверка для неквадратных матриц:
+//UPD: не работает для неквадратных (скорее всего и не надо)
 template<class TYPE>
 Matrix<TYPE>* Matrix<TYPE>::kroneckerProduct(Matrix* b)
 {
@@ -169,13 +176,6 @@ Matrix<TYPE>* Matrix<TYPE>::kroneckerProduct(Matrix* b)
 
 
 
-  //TODO: доработай эту дрисню
-  //      я знаю тебе хочется это стереть, но чувак, ты должен её доделать,
-  //      проблема только с блоками ссаными
-
-  //UPD: done! проверка для 2 одинаковых матриц 2х2 и
-  //     для матриц 2х2 и 3х3
-  //TODO: проверка для неквадратных матриц
   int l = 0;
   int k = 0;
   block = 0;
@@ -207,6 +207,115 @@ Matrix<TYPE>* Matrix<TYPE>::kroneckerProduct(Matrix* b)
 
 
   return new Matrix(newMatrix, newSize[0], newSize[1]);
+}
+
+template<class TYPE>
+Matrix<TYPE>* Matrix<TYPE>::shultsReverse()
+{
+    int* size = new int[2];
+    size[0] = getSize()[0];
+    size[1] = getSize()[1];
+    double** edinMat = new double*[size[0]];
+    for (int i = 0; i < size[0]; i++)
+    {
+        edinMat[i] = new double[size[1]];
+        for (int j = 0; j < size[1]; j++)
+        {
+            edinMat[i][j] = 0;
+        }
+
+        edinMat[i][i] = 2;
+    }
+
+    Matrix<double>* edin = new Matrix<double>(edinMat, size[0], size[1]);
+
+    double N1 = 0, Ninf = 0; //норма матрицы по столбцам и по строкам
+    Matrix<double>* inv = clone(this);
+    inv->printMatrix();
+    /*
+    for (int row = 0; row < size[0]; row++){
+        double colsum = 0, rowsum = 0;
+        for(int col = 0; col < size[1]; col++){
+            rowsum += fabs(inv->getMatrix()[row][col]);
+            colsum += fabs(inv->getMatrix()[col][row]);
+        }
+        N1 = std::max(colsum, N1);
+        Ninf = std::max(rowsum, Ninf);
+    }
+
+    inv = inv->transpose()->productNumber(1/(N1*Ninf));
+    double EPS = 0.001;
+
+    while (fabs (this->product(inv)->getGaussDet() - 1) >= EPS)
+    {
+        Matrix* prev = clone(inv);
+        inv = this->product(prev);
+        inv = inv->productNumber(-1);
+        inv = inv->sum(edin);
+        inv = prev->product(inv);
+        delete prev;
+    }
+    delete edinMat;
+    */
+    return inv;
+}
+
+template<class TYPE>
+Matrix<TYPE>* Matrix<TYPE>::transpose()
+{
+    TYPE** trasposedMat = new TYPE *[this->getSize()[0]];
+    for (int i = 0; i < this->getSize()[0]; i++)
+    {
+        trasposedMat[i] = new TYPE[this->getSize()[1]];
+        for (int j = 0; j < this->getSize()[1]; j++)
+        {
+            trasposedMat[i][j] = this->getMatrix()[j][i];
+        }
+    }
+
+    return new Matrix(trasposedMat, this->getSize()[0], this->getSize()[1]);
+}
+
+template<class TYPE>
+Matrix<TYPE>* Matrix<TYPE>::productNumber(double num)
+{
+    for (int i = 0; i < this->getSize()[0]; i++)
+    {
+        for (int j = 0; j < this->getSize()[1]; j++)
+        {
+            this->getMatrix()[i][j] *= num;
+        }
+    }
+
+    return new Matrix(this->getMatrix(), this->getSize()[0], this->getSize()[1]);
+}
+
+
+template<class TYPE>
+Matrix<TYPE>* Matrix<TYPE>::clone(Matrix *a)
+{
+    TYPE** newMat = new TYPE*[a->getSize()[0]];
+    for (int i = 0; i < a->getSize()[0]; i++)
+    {
+        newMat[i] = new TYPE[a->getSize()[1]];
+        for (int j = 0; j < a->getSize()[1]; j++)
+        {
+            newMat[i][j] = a->getMatrix()[i][j];
+        }
+    }
+
+    return new Matrix(newMat, a->getSize()[0], a->getSize()[1]);
+}
+
+template<class TYPE>
+double Matrix<TYPE>::getGaussDet()
+{
+    double det = 1;
+    for (int i = 0; i < this->getSize()[0]; i++)
+    {
+        det *= this->getMatrix()[i][i];
+    }
+    return det;
 }
 
 template<class TYPE>

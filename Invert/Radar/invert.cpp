@@ -321,10 +321,8 @@ double **Invert::getMult(double **matrix1, double** matrix2){
 
 double **Invert::shultsMethod(double** matrix){
     double **edin = new double *[N];
-    double **prev = new double *[N];
     for (int i = 0; i < N; i++){
         edin[i] = new double[N];
-        prev[i] = new double[N];
         for (int j = 0; j < N; j++){
             edin[i][j] = 0;
         }

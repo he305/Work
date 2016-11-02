@@ -14,9 +14,16 @@ public:
   void printRow(int num) const;
   ~Matrix();
 
+  Matrix* clone(Matrix* a);
+
   Matrix* sum(Matrix* b);
   Matrix* product(Matrix* b);
   Matrix* kroneckerProduct(Matrix* b);
+  Matrix* transpose();
+  Matrix* productNumber(double num);
+  Matrix* shultsReverse();
+
+  double getGaussDet();
 
   int* getSize();
   TYPE** getMatrix();
