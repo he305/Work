@@ -5,76 +5,36 @@ using namespace std;
 
 int main()
 {
-    int size_a[2];
-    //int size_b[2];
-    cout << "Input size of a";
-    for (int i = 0; i < 2; i++)
+    const int N = 6;
+    double* a = new double[N];
+    double* aIst = new double[N];
+    for (int i = 0; i < N; i++)
     {
-        cin >> size_a[i];
+        cin >> a[i];
+        aIst[i] = a[i] + 1;
     }
-
-    /*
-    cout << "Input size of b";
-    for (int i = 0; i < 2; i++)
+    for (int i = 0; i < N; i++)
     {
-        cin >> size_b[i];
+        cout << a[i] << '\t';
     }
-    */
+    Matrix<double>* aMat = new Matrix<double>(a, N);
+    Matrix<double>* aIstMat = new Matrix<double>(aIst, N);
 
-    cout << "Input matrix a\n";
-    double** a = new double *[size_a[0]];
-    for (int i = 0; i < size_a[0]; i++)
+    Matrix<double>* rx = new Matrix<double>();
+    Matrix<double>* left = aMat->sum(aIstMat->minus());
+    Matrix<double>* right = aMat->sum(aIstMat->minus())->transpose();
+    rx = left->product(right);
+    //aMat->sum(aIstMat->minus())->product(aMat->sum(aIstMat->minus())->transpose());
+
+    cout << "\n\nHERE\n\n";
+    for (int i = 0; i < rx->getSize()[0]; i++)
     {
-        a[i] = new double[size_a[1]];
-        for (int j = 0; j < size_a[1]; j++)
+        for (int j = 0; j < rx->getSize()[1]; j++)
         {
-            cin >> a[i][j];
-        }
-    }
-
-    /*
-    cout << "Input matrix b\n";
-    double** b = new double *[size_b[0]];
-    for (int i = 0; i < size_b[0]; i++)
-    {
-        b[i] = new double[size_b[1]];
-        for (int j = 0; j < size_b[1]; j++)
-        {
-            cin >> b[i][j];
-        }
-    }
-    */
-
-    for (int i = 0; i < size_a[0]; i++)
-    {
-        for (int j = 0; j < size_a[1]; j++)
-        {
-            cout << a[i][j] << '\t';
+            cout << rx->getMatrix()[i][j] << '\t';
         }
         cout << '\n';
     }
-
-    cout << "\n\n";
-
-    /*
-    for (int i = 0; i < size_b[0]; i++)
-    {
-        for (int j = 0; j < size_b[1]; j++)
-        {
-            cout << b[i][j] << '\t';
-        }
-        cout << '\n';
-    }
-
-    cout << "\n\n";
-    */
-
-    Matrix<double>* mat1 = new Matrix<double>(a, size_a[0], size_a[1]);
-    //Matrix<double>* mat2 = new Matrix<double>(b, size_b[0], size_b[1]);
-
-    cout << "Обратная матрица\n";
-    mat1->shultsReverse()->printMatrix();
-
     return 0;
 }
 

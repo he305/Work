@@ -8,8 +8,9 @@ class MATRIXSHARED_EXPORT Matrix
 {
 
 public:
+  Matrix();
   Matrix(TYPE **a, int row, int col);
-  Matrix(TYPE **a, int size);
+  Matrix(TYPE *a, int size);
   void printMatrix() const;
   void printRow(int num) const;
   ~Matrix();
@@ -22,6 +23,7 @@ public:
   Matrix* transpose();
   Matrix* productNumber(double num);
   Matrix* shultsReverse();
+  Matrix* minus();
 
   double getGaussDet();
 

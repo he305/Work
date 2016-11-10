@@ -5,6 +5,12 @@
 template class Matrix<double>;
 
 template<class TYPE>
+Matrix<TYPE>::Matrix()
+{
+
+}
+
+template<class TYPE>
 Matrix<TYPE>::~Matrix()
 {
   for (int i = 0; i < size[0]; i++)
@@ -31,6 +37,23 @@ Matrix<TYPE>::Matrix(TYPE** a, int row, int col)
   this->size = new int(2);
   size[0] = row;
   size[1] = col;
+}
+
+template<class TYPE>
+Matrix<TYPE>::Matrix(TYPE *a, int size)
+{
+    this->mat = new TYPE*[1];
+    for (int i = 0; i < 1; i++)
+    {
+        this->mat[i] = new TYPE[size];
+        for (int j = 0; j < size; j++)
+        {
+            this->mat[i][j] = a[j];
+        }
+    }
+    this->size = new int[2];
+    this->size[0] = 1;
+    this->size[1] = size;
 }
 
 template<class TYPE>
@@ -84,9 +107,6 @@ Matrix<TYPE>* Matrix<TYPE>::sum(Matrix* b)
 template<class TYPE>
 Matrix<TYPE>* Matrix<TYPE>::product(Matrix* b)
 {
-  if (this->getSize()[0] < b->getSize()[1])
-    return 0;
-
   int* newSize = new int(2);
   newSize[0] = this->getSize()[0];
   newSize[1] = b->getSize()[1];
@@ -98,12 +118,14 @@ Matrix<TYPE>* Matrix<TYPE>::product(Matrix* b)
     for(int j = 0; j < newSize[1]; j++)
     {
       TYPE sum = 0;
-      for (int k = 0; k <= newSize[1]+1; k++)
+      for (int k = 0; k < b->getSize()[0]; k++)
       {
         sum += this->getMatrix()[i][k] * b->getMatrix()[k][j];
       }
       newMatrix[i][j] = sum;
+      std::cout << newMatrix[i][j] << '\t';
     }
+    std::cout << '\n';
   }
 
   return new Matrix(newMatrix, newSize[0], newSize[1]);
@@ -263,11 +285,11 @@ Matrix<TYPE>* Matrix<TYPE>::shultsReverse()
 template<class TYPE>
 Matrix<TYPE>* Matrix<TYPE>::transpose()
 {
-    TYPE** trasposedMat = new TYPE *[this->getSize()[0]];
-    for (int i = 0; i < this->getSize()[0]; i++)
+    TYPE** trasposedMat = new TYPE *[this->getSize()[1]];
+    for (int i = 0; i < this->getSize()[1]; i++)
     {
-        trasposedMat[i] = new TYPE[this->getSize()[1]];
-        for (int j = 0; j < this->getSize()[1]; j++)
+        trasposedMat[i] = new TYPE[this->getSize()[0]];
+        for (int j = 0; j < this->getSize()[0]; j++)
         {
             trasposedMat[i][j] = this->getMatrix()[j][i];
         }
@@ -288,6 +310,22 @@ Matrix<TYPE>* Matrix<TYPE>::productNumber(double num)
     }
 
     return new Matrix(this->getMatrix(), this->getSize()[0], this->getSize()[1]);
+}
+
+template<class TYPE>
+Matrix<TYPE>* Matrix<TYPE>::minus()
+{
+    double** a = new double*[this->getSize()[0]];
+    for (int i = 0; i < this->getSize()[0]; i++)
+    {
+        a[i] = new double[this->getSize()[1]];
+        for (int j = 0; j < this->getSize()[1]; j++)
+        {
+            a[i][j] = -this->getMatrix()[i][j];
+        }
+    }
+
+    return new Matrix(a, this->getSize()[0], this->getSize()[1]);
 }
 
 
