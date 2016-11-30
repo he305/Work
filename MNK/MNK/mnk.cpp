@@ -97,10 +97,6 @@ double* MNK::calculate()
         indexFromBehind--;
     }
 
-    //Bug probably in index
-
-
-
     indexFromBehind = rows-2;
     //Old version: zi = sum(j->size)(xj^(polynomePower-i+1)*yj)
     //New version: zi = sum(j->size)(xj^i*yj)

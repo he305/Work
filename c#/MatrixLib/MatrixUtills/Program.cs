@@ -11,7 +11,7 @@ namespace MatrixUtills
             double[,] aMat = new double[N, N];
             for (int i = 0; i < N; i++)
             {
-                for (int j = 0; i < N; j++)
+                for (int j = 0; j < N; j++)
                 {
                     aMat[i, j] = double.Parse(Console.ReadLine());
                 }
@@ -19,7 +19,8 @@ namespace MatrixUtills
             Matrix a = new Matrix(aMat, N, N);
             Matrix b = new Matrix(aMat, N, N);
 
-            (a + b).printMatrix();  
+            (a + b).printMatrix();
+            Console.ReadKey();
         }
     }
 }

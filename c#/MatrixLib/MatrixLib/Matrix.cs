@@ -43,8 +43,9 @@ namespace MatrixLib
             {
                 for (int j = 0; j < col; j++)
                 {
-                    Console.WriteLine(matrix[i, j] + "\t");
+                    Console.Write(matrix[i, j] + "\t");
                 }
+                Console.WriteLine();
             }
         }
 
