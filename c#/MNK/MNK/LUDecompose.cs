@@ -23,17 +23,17 @@ namespace MNK
             double[] x;
 
             int[] p;
-            
-            p = lupDecompose(out a1);
+
+            a1 = copyMatrix(matrix);
+            p = lupDecompose(ref a1);
             y = forwardSub(a1, vector, p);
             x = backSub(a1, y);
 
             return x;
         }
 
-        private int[] lupDecompose(out double[,] mat)
+        private int[] lupDecompose(ref double[,] mat)
         {
-            mat = copyMatrix(matrix);
             int j, k;
             int[] p = new int[size];
 

@@ -114,7 +114,10 @@ namespace MNK
                 {
                     answer[i] = Math.Round(answer[i]);
                 }
-                Console.WriteLine(answer[i]);
+                else
+                {
+                    answer[i] = Math.Round(answer[i], 4);
+                }
             }
 
             return answer;
