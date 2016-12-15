@@ -9,6 +9,8 @@ namespace MatrixLib
         private int row, col;
         #endregion
 
+        private const double EPS = 0.001;
+
         #region Constructions
         public Matrix()
         {
@@ -49,20 +51,6 @@ namespace MatrixLib
             }
         }
 
-        public Matrix sum(Matrix b)
-        {
-            double[,] newMat = new double[this.row, this.col];
-            for (int i = 0; i < this.row; i++)
-            {
-                for (int j = 0; j < this.col; j++)
-                {
-                    newMat[i, j] = this.matrix[i, j] + b.matrix[i, j];
-                }
-            }
-
-            return new Matrix(newMat, this.row, this.col);
-        }
-
         public static Matrix operator +(Matrix a, Matrix b)
         {
             double[,] newMat = new double[a.row, a.col];
@@ -85,6 +73,48 @@ namespace MatrixLib
                 for (int j = 0; j < a.col; j++)
                 {
                     newMat[i, j] = a.matrix[i, j] - b.matrix[i, j];
+                }
+            }
+
+            return new Matrix(newMat, a.row, a.col);
+        }
+
+        public static Matrix operator *(Matrix a, Matrix b)
+        {
+            double[,] newMat = new double[a.row, a.col];
+
+            for (int i = 0; i < a.row; i++)
+            {
+                for (int j = 0; j < a.col; j++)
+                {
+                    newMat[i, j] = 0;
+                    for (int k = 0; k < a.row; k++)
+                    {
+                        newMat[i, j] += a.matrix[i, k] * b.matrix[k, j];
+                    }
+                    if (Math.Abs(newMat[i, j]) < EPS)
+                        newMat[i, j] = 0;
+                }
+            }
+
+            return new Matrix(newMat, a.row, a.col);
+        }
+
+        public Matrix GetMultiplication(Matrix a, Matrix b)
+        {
+            double[,] newMat = new double[a.row, a.col];
+
+            for (int i = 0; i < a.row; i++)
+            {
+                for (int j = 0; j < a.col; j++)
+                {
+                    newMat[i, j] = 0;
+                    for (int k = 0; k < a.row; k++)
+                    {
+                        newMat[i, j] += a.matrix[i, k] * b.matrix[k, j];
+                    }
+                    if (Math.Abs(newMat[i, j]) < EPS)
+                        newMat[i, j] = 0;
                 }
             }
 
@@ -148,6 +178,60 @@ namespace MatrixLib
             return new Matrix(tempMatrix, tempRow, tempCol);
         }
 
+        public Matrix invert()
+        {
+            Matrix mat = clone();
+            Matrix edin = Matrix.GetEMatrix(row);
+
+            double N1 = 0, NInf = 0;
+            Matrix inv = clone();
+
+            for (int i = 0; i < row; i++)
+            {
+                double colsum = 0, rowsum = 0;
+                for (int j = 0; j < row; j++)
+                {
+                    rowsum += Math.Abs(inv.matrix[i, j]);
+                    colsum += Math.Abs(inv.matrix[j, i]);
+                }
+                N1 = Math.Max(colsum, N1);
+                NInf = Math.Max(rowsum, N1);
+            }
+
+            inv = inv.transpose();
+           
+            inv = inv.productNumber(1 / (N1 * NInf));
+
+            //CHECK this
+            while(Math.Abs((mat*inv).getGaussDet() - 1) >= EPS)
+            {
+                Matrix prev = inv.clone();
+                inv = mat * prev;
+                inv = inv.productNumber(-1);
+                inv = inv + edin;
+                inv = prev * inv;
+            }
+
+            return inv;
+        }
+
+        public static Matrix GetEMatrix(int size)
+        {
+            double[,] edin = new double[size, size];
+            for(int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    if (i == j)
+                        edin[i, j] = 1;
+                    else
+                        edin[i, j] = 0;
+                }
+            }
+
+            return new Matrix(edin, size, size);
+        }
+
         public Matrix transpose()
         {
             double[,] tempMatrix = new double[this.col, this.row];
@@ -182,6 +266,21 @@ namespace MatrixLib
                 det *= this.matrix[i, i];
             }
             return det;
+        }
+
+        public Matrix clone()
+        {
+            double[,] mat = new double[row, col];
+
+            for (int i = 0; i < row; i++)
+            {
+                for (int j = 0; j < col; j++)
+                {
+                    mat[i, j] = matrix[i, j];
+                }
+            }
+
+            return new Matrix(mat, row, col);
         }
     }
 }
