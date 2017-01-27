@@ -17,9 +17,8 @@ namespace MatrixUtills
                 }
             }
             Matrix a = new Matrix(aMat, N, N);
-            Matrix b = new Matrix(aMat, N, N);
 
-            (a + b).printMatrix();
+            (a.invert()).printMatrix();
             Console.ReadKey();
         }
     }

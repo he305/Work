@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace MNK
@@ -15,45 +9,11 @@ namespace MNK
         public MNKform()
         {
             InitializeComponent();
-
-            //int size = 4;
-
-            //double[] xVector = new double[size];
-            //double[] yVector = new double[size];
-            //double[] zVector = new double[size];
-            //double[] wVector = new double[size];
-
-            //Console.WriteLine("XVector");
-            //for(int i = 0; i < size; i++)
-            //{
-            //    xVector[i] = double.Parse(Console.ReadLine());
-            //    wVector[i] = 1;
-            //}
-
-            //Console.WriteLine("YVector");
-            //for (int i = 0; i < size; i++)
-            //{
-            //    yVector[i] = double.Parse(Console.ReadLine());
-            //}
-
-            //Console.WriteLine("ZVector");
-            //for (int i = 0; i < size; i++)
-            //{
-            //    zVector[i] = double.Parse(Console.ReadLine());
-            //}
-
-            //int[] polynomeSize = new int[2];
-            //polynomeSize[0] = 1;
-            //polynomeSize[1] = 1;
-
-            //Console.WriteLine("Answer");
-            //MNK mnk = new MNK(xVector, yVector, zVector, wVector, size, polynomeSize);
-            //mnk.Calculate();
         }
 
         private void MNKform_Load(object sender, EventArgs e)
         {
-
+            polynomeSizeBox.SelectedIndex = 0;
         }
 
         private void EditCount_TextChanged(object sender, EventArgs e)
@@ -142,11 +102,38 @@ namespace MNK
             }
 
             int[] polynomeSize = new int[2];
-            polynomeSize[0] = 1;
-            polynomeSize[1] = 1;
 
+            int chosenPolynomeSize = polynomeSizeBox.SelectedIndex;
+
+            switch(chosenPolynomeSize)
+            {
+                case 0:
+                    polynomeSize[0] = 1;
+                    polynomeSize[1] = 1;
+                    break;
+                case 1:
+                    polynomeSize[0] = 2;
+                    polynomeSize[1] = 1;
+                    break;
+                case 2:
+                    polynomeSize[0] = 1;
+                    polynomeSize[1] = 2;
+                    break;
+                case 3:
+                    polynomeSize[0] = 2;
+                    polynomeSize[1] = 2;
+                    break;
+                default:
+                    throw new Exception();
+            }
+
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
             MNK mnk = new MNK(x, y, z, w, size, polynomeSize);
             double[] answer = mnk.Calculate();
+            watch.Stop();
+
+            Console.WriteLine("TIME {0}", watch.Elapsed);
 
             var results = new TextBox[3];
             for (int i = 0; i < 3; i++)
@@ -158,6 +145,12 @@ namespace MNK
             }
 
             answerLayout.Controls.AddRange(results);
+        }
+
+        private void drawGraphButton_Click(object sender, EventArgs e)
+        {
+            MNKGraph graph = new MNKGraph();
+            graph.Show();
         }
     }
 }

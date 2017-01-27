@@ -39,6 +39,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -58,10 +59,19 @@
     <Compile Include="MNKform.Designer.cs">
       <DependentUpon>MNKform.cs</DependentUpon>
     </Compile>
+    <Compile Include="MNKGraph.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MNKGraph.Designer.cs">
+      <DependentUpon>MNKGraph.cs</DependentUpon>
+    </Compile>
     <Compile Include="MNKwindow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="MNKform.resx">
       <DependentUpon>MNKform.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MNKGraph.resx">
+      <DependentUpon>MNKGraph.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -87,6 +97,9 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="TODO.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -181,29 +181,28 @@ namespace MatrixLib
         public Matrix invert()
         {
             Matrix mat = clone();
-            Matrix edin = Matrix.GetEMatrix(row);
+            Matrix edin = Matrix.GetE2Matrix(row);
 
             double N1 = 0, NInf = 0;
             Matrix inv = clone();
 
+
             for (int i = 0; i < row; i++)
             {
                 double colsum = 0, rowsum = 0;
-                for (int j = 0; j < row; j++)
+                for (int j = 0; j < col; j++)
                 {
                     rowsum += Math.Abs(inv.matrix[i, j]);
                     colsum += Math.Abs(inv.matrix[j, i]);
                 }
                 N1 = Math.Max(colsum, N1);
-                NInf = Math.Max(rowsum, N1);
+                NInf = Math.Max(rowsum, NInf);
             }
 
             inv = inv.transpose();
-           
             inv = inv.productNumber(1 / (N1 * NInf));
-
-            //CHECK this
-            while(Math.Abs((mat*inv).getGaussDet() - 1) >= EPS)
+            
+            while (Math.Abs((mat*inv).getGaussDet() - 1) >= EPS)
             {
                 Matrix prev = inv.clone();
                 inv = mat * prev;
@@ -215,7 +214,7 @@ namespace MatrixLib
             return inv;
         }
 
-        public static Matrix GetEMatrix(int size)
+        public static Matrix GetE2Matrix(int size)
         {
             double[,] edin = new double[size, size];
             for(int i = 0; i < size; i++)
@@ -223,7 +222,7 @@ namespace MatrixLib
                 for (int j = 0; j < size; j++)
                 {
                     if (i == j)
-                        edin[i, j] = 1;
+                        edin[i, j] = 2;
                     else
                         edin[i, j] = 0;
                 }

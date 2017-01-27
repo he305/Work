@@ -41,6 +41,8 @@
             this.YLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.ZLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.WLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.polynomeSizeBox = new System.Windows.Forms.ComboBox();
+            this.drawGraphButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -202,11 +204,36 @@
             this.WLayoutPanel.Size = new System.Drawing.Size(59, 263);
             this.WLayoutPanel.TabIndex = 15;
             // 
+            // polynomeSizeBox
+            // 
+            this.polynomeSizeBox.FormattingEnabled = true;
+            this.polynomeSizeBox.Items.AddRange(new object[] {
+            "x + y",
+            "x^2 + y",
+            "x + y^2",
+            "x^2 + y^2"});
+            this.polynomeSizeBox.Location = new System.Drawing.Point(246, 6);
+            this.polynomeSizeBox.Name = "polynomeSizeBox";
+            this.polynomeSizeBox.Size = new System.Drawing.Size(121, 21);
+            this.polynomeSizeBox.TabIndex = 16;
+            // 
+            // drawGraphButton
+            // 
+            this.drawGraphButton.Location = new System.Drawing.Point(396, 292);
+            this.drawGraphButton.Name = "drawGraphButton";
+            this.drawGraphButton.Size = new System.Drawing.Size(97, 23);
+            this.drawGraphButton.TabIndex = 17;
+            this.drawGraphButton.Text = "График";
+            this.drawGraphButton.UseVisualStyleBackColor = true;
+            this.drawGraphButton.Click += new System.EventHandler(this.drawGraphButton_Click);
+            // 
             // MNKform
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(505, 338);
+            this.Controls.Add(this.drawGraphButton);
+            this.Controls.Add(this.polynomeSizeBox);
             this.Controls.Add(this.WLayoutPanel);
             this.Controls.Add(this.ZLayoutPanel);
             this.Controls.Add(this.YLayoutPanel);
@@ -243,6 +270,8 @@
         private System.Windows.Forms.TableLayoutPanel YLayoutPanel;
         private System.Windows.Forms.TableLayoutPanel ZLayoutPanel;
         private System.Windows.Forms.TableLayoutPanel WLayoutPanel;
+        private System.Windows.Forms.ComboBox polynomeSizeBox;
+        private System.Windows.Forms.Button drawGraphButton;
     }
 }
 
