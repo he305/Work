@@ -6,6 +6,8 @@ namespace MNK
 {
     public partial class MNKform : Form
     {
+        double[] answer = new double[3];
+        double[,] coords;
         public MNKform()
         {
             InitializeComponent();
@@ -101,6 +103,15 @@ namespace MNK
                 }
             }
 
+            coords = new double[size, 3];
+            for (int i = 0; i < size; i++)
+            {
+                coords[i, 0] = x[i];
+                coords[i, 1] = y[i];
+                coords[i, 2] = z[i];
+            }
+
+
             int[] polynomeSize = new int[2];
 
             int chosenPolynomeSize = polynomeSizeBox.SelectedIndex;
@@ -130,7 +141,7 @@ namespace MNK
             Stopwatch watch = new Stopwatch();
             watch.Start();
             MNK mnk = new MNK(x, y, z, w, size, polynomeSize);
-            double[] answer = mnk.Calculate();
+            answer = mnk.Calculate();
             watch.Stop();
 
             Console.WriteLine("TIME {0}", watch.Elapsed);
@@ -149,8 +160,25 @@ namespace MNK
 
         private void drawGraphButton_Click(object sender, EventArgs e)
         {
-            MNKGraph graph = new MNKGraph();
-            graph.Show();
+            ProcessStartInfo start = new ProcessStartInfo();
+            string fileName = @"..\graph.py";
+
+            string[] args = new string[3];
+            for (int i = 0; i < 3; i++)
+            {
+                args[i] = answer[i].ToString();
+                args[i].Replace(',', '.');
+            }
+
+            start.FileName = @"C:\Users\sergey\AppData\Local\Programs\Python\Python36-32\python.exe";
+            start.Arguments = fileName + " " + string.Join(" ", args) + EditCount.Text + string.Join(" ", coords);
+            Console.WriteLine(start.Arguments);
+            start.UseShellExecute = true;
+            start.RedirectStandardOutput = false;
+            using (Process process = Process.Start(start))
+            {
+                Console.Read();
+            }
         }
     }
 }

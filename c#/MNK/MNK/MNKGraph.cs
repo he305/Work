@@ -12,9 +12,14 @@ namespace MNK
 {
     public partial class MNKGraph : Form
     {
+
         public MNKGraph()
         {
             InitializeComponent();
+        }
+
+        private void MNKGraph_Load(object sender, EventArgs e)
+        {
         }
     }
 }

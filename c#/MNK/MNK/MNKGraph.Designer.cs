@@ -37,6 +37,8 @@
             // 
             // graph
             // 
+            chartArea1.Area3DStyle.Enable3D = true;
+            chartArea1.Area3DStyle.WallWidth = 0;
             chartArea1.Name = "ChartArea1";
             this.graph.ChartAreas.Add(chartArea1);
             legend1.Name = "Legend1";
@@ -59,6 +61,7 @@
             this.Controls.Add(this.graph);
             this.Name = "MNKGraph";
             this.Text = "График";
+            this.Load += new System.EventHandler(this.MNKGraph_Load);
             ((System.ComponentModel.ISupportInitialize)(this.graph)).EndInit();
             this.ResumeLayout(false);
 
