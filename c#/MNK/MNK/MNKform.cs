@@ -170,6 +170,17 @@ namespace MNK
                 args[i].Replace(',', '.');
             }
 
+            string[] coordsString = new string[int.Parse(EditCount.Text) * 3];
+
+            int j = 0;
+            for (int i = 0; i < int.Parse(EditCount.Text) * 3; i++)
+            {
+                while (j < 3)
+                {
+                    //Can yo do smth here, 私はでかない。
+                 }
+            }
+
             start.FileName = @"C:\Users\sergey\AppData\Local\Programs\Python\Python36-32\python.exe";
             start.Arguments = fileName + " " + string.Join(" ", args) + EditCount.Text + string.Join(" ", coords);
             Console.WriteLine(start.Arguments);
