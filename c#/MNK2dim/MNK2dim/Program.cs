@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace MNK2dim
 {
@@ -12,10 +13,13 @@ namespace MNK2dim
         //Optic
         static List<Measure> optic = new List<Measure>();
 
+        static String pythonScriptString = @"/../graph.py";
+
         static double[] getExcelColumn(Worksheet ws, int i, bool skipZero)
         {
             Range range = ws.UsedRange.Columns[i];
             Array arr = (Array)range.Cells.Value;
+
             double[] vector; 
             if (skipZero)
                 vector = arr.OfType<object>().Skip(1).Select(Convert.ToDouble).Where(o => o != 0).ToArray();
@@ -82,7 +86,7 @@ namespace MNK2dim
 
             Console.ReadKey();
         }
-
+            
         static void CalculateByRange(double rang)
         {
             Console.WriteLine("Расстояние = " + rang);
@@ -184,7 +188,7 @@ namespace MNK2dim
                 targetUgolMestaOptic[j] = optic[i].getUgolMesta();
                 targetTimeOptic[j] = optic[i].getTime();
 
-                if (targetAzimutOptic[j] > 6.25)
+                if (targetAzimutOptic[j] > 6)
                 {
                     targetAzimutOptic[j] = targetAzimutOptic[j] - (360 * Math.PI / 180);
                 }
@@ -201,37 +205,46 @@ namespace MNK2dim
                 Console.WriteLine(answerOpticAzimut[i] + "\t" + answerOpticUgolMesta[i]);
             }
 
-            double matOjidDeltaAzimut = 0;
-            double matOjidDeltaAzimutPower2 = 0;
-
-            double matOjidDeltaUgolMesta = 0;
-            double matOjidDeltaUgolMestaPower2 = 0;
-
-            double dispersia;
             Console.WriteLine("DELTA");
-            double[] deltaVectorAzimut = new double[sizeOptic];
-            double[] deltaVectorUgolMesta = new double[sizeOptic];
-            for (int i = 0; i < sizeOptic; i++)
-            {
-                deltaVectorAzimut[i] = (answerLocalAzimut[1] * optic[i].getTime() + answerLocalAzimut[0]) -
-                    (answerOpticAzimut[1] * optic[i].getTime() + answerOpticAzimut[0]);
-                matOjidDeltaAzimut += deltaVectorAzimut[i];
-                matOjidDeltaAzimutPower2 += Math.Pow(deltaVectorAzimut[i], 2);
 
-                deltaVectorUgolMesta[i] = (answerLocalUgolMesta[1] * optic[i].getTime() + answerLocalUgolMesta[0]) -
-                    (answerOpticUgolMesta[1] * optic[i].getTime() + answerOpticUgolMesta[0]);
-                matOjidDeltaUgolMesta += deltaVectorUgolMesta[i];
-                matOjidDeltaUgolMestaPower2 += Math.Pow(deltaVectorUgolMesta[i], 2);
-            }
-            matOjidDeltaAzimut /= sizeOptic;
-            matOjidDeltaAzimutPower2 /= sizeOptic;
-            matOjidDeltaUgolMesta /= sizeOptic;
-            matOjidDeltaUgolMestaPower2 /= sizeOptic;
-            Console.WriteLine("Мат ожидание: " + matOjidDeltaAzimut + "\t" + matOjidDeltaUgolMesta);
-            Console.WriteLine("Дисперсия: " + (matOjidDeltaAzimutPower2 - Math.Pow(matOjidDeltaAzimut, 2)) + "\t" +
-                                               (matOjidDeltaUgolMestaPower2 - Math.Pow(matOjidDeltaUgolMesta, 2)));
+            double[] statisticAzimut = getStatistic(answerLocalAzimut, targetAzimutOptic, targetTimeOptic, sizeOptic);
+            double[] statisticUgolMesta = getStatistic(answerLocalUgolMesta,targetUgolMestaOptic, targetTimeOptic, sizeOptic);
+
+            Console.WriteLine("Мат. ожидание\t{0}\t{1}", statisticAzimut[0], statisticUgolMesta[0]);
+            Console.WriteLine("Отклонение\t{0}\t{1}", statisticAzimut[1], statisticUgolMesta[1]);
 
             Console.WriteLine("\n/////////////////////////////////////////////////\n");
+
+            ProcessStartInfo start = new ProcessStartInfo();
+            start.FileName = pythonScriptString;
+
+        }
+
+        private static double[] getStatistic(double[] answerLocal, double[] targetOptic, double[] targetTime, int size)
+        {
+            /*
+             * statistic[0] = matOjid; 
+             * statistic[1] = dispersia;
+             * 
+             */
+            double[] statistic = new double[2];
+            double matOjidDeltaPower2 = 0;
+
+            double[] deltaVectorAzimut = new double[size];
+
+            for (int i = 0; i < size; i++)
+            {
+                deltaVectorAzimut[i] = (answerLocal[1] * targetTime[i] + answerLocal[0]) - targetOptic[i];
+                statistic[0] += deltaVectorAzimut[i];
+                matOjidDeltaPower2 += Math.Pow(deltaVectorAzimut[i], 2);
+            }
+
+            statistic[0] /= size;
+            matOjidDeltaPower2 /= size;
+
+            statistic[1] = Math.Sqrt(matOjidDeltaPower2 - Math.Pow(statistic[0], 2));
+
+            return statistic;
         }
     }
 }
