@@ -9,23 +9,12 @@ namespace MNK2dim
     class Measure
     {
         private double time;
-        private double azimut;
-        private double ugolMesta;
-        private double range;
+        private double meas;
 
-        public Measure(double time, double azimut, double ugolMesta)
+        public Measure(double time, double meas)
         {
             this.time = time;
-            this.azimut = azimut;
-            this.ugolMesta = ugolMesta;
-        }
-
-        public Measure(double time, double azimut, double ugolMesta, double range)
-        {
-            this.time = time;
-            this.azimut = azimut;
-            this.ugolMesta = ugolMesta;
-            this.range = range;
+            this.meas = meas;
         }
 
         public double getTime()
@@ -33,19 +22,9 @@ namespace MNK2dim
             return time;
         }
 
-        public double getAzimut()
+        public double getMeasure()
         {
-            return azimut;
-        }
-
-        public double getUgolMesta()
-        {
-            return ugolMesta;
-        }
-
-        public double getRange()
-        { 
-            return range;
+            return meas;
         }
      }
 }

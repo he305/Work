@@ -9,9 +9,13 @@ namespace MNK2dim
     class Program
     {
         //Radio
-        static List<Measure> radio = new List<Measure>();
+        static List<Measure> radioAzimut = new List<Measure>();
+        static List<Measure> radioUgolMesta = new List<Measure>();
+
+        static List<Measure> range = new List<Measure>();
         //Optic
-        static List<Measure> optic = new List<Measure>();
+        static List<Measure> opticAzimut = new List<Measure>();
+        static List<Measure> opticUgolMesta = new List<Measure>();
 
         static String pythonScriptString = @"/../graph.py";
 
@@ -20,7 +24,9 @@ namespace MNK2dim
             Range range = ws.UsedRange.Columns[i];
             Array arr = (Array)range.Cells.Value;
 
-            double[] vector; 
+            List<Measure> measures = new List<Measure>();
+
+            double[] vector;
             if (skipZero)
                 vector = arr.OfType<object>().Skip(1).Select(Convert.ToDouble).Where(o => o != 0).ToArray();
             else
@@ -48,20 +54,37 @@ namespace MNK2dim
             Sheets sheets = wb.Worksheets;
             Worksheet ws = (Worksheet)sheets.get_Item(1);
 
-            double[] timeLocalVector = getExcelColumn(ws, 2, true);
-            double[] rangeVector = getExcelColumn(ws, 8, true);
-            double[] azimutLocalVector = getExcelColumn(ws, 9, true);
-            double[] ugolMestaLocalVector = getExcelColumn(ws, 10, true);
+
+            double[] azimutLocalVector = getExcelColumn(ws, 9, false);
+            double[] timeLocalVector = getExcelColumn(ws, 2, false);
+            double[] rangeVector = getExcelColumn(ws, 23, false);
 
             for (int i = 0; i < azimutLocalVector.Length; i++)
             {
-                azimutLocalVector[i] = azimutLocalVector[i] * Math.PI / 180;
-                ugolMestaLocalVector[i] = ugolMestaLocalVector[i] * Math.PI / 180;
-                timeLocalVector[i] = Math.Round(timeLocalVector[i]);
-
-                radio.Add(new Measure(timeLocalVector[i], azimutLocalVector[i], ugolMestaLocalVector[i], rangeVector[i]));    
+                if (azimutLocalVector[i] != 0)
+                {
+                    azimutLocalVector[i] = azimutLocalVector[i] * Math.PI / 180;
+                    radioAzimut.Add(new Measure(Math.Round(timeLocalVector[i], 2), azimutLocalVector[i]));
+                }
             }
-            
+
+            double[] ugolMestaLocalVector = getExcelColumn(ws, 10, false);
+
+            for (int i = 0; i < ugolMestaLocalVector.Length; i++)
+            {
+                if (ugolMestaLocalVector[i] != 0)
+                {
+                    ugolMestaLocalVector[i] = ugolMestaLocalVector[i] * Math.PI / 180;
+                    radioUgolMesta.Add(new Measure(Math.Round(timeLocalVector[i], 2), ugolMestaLocalVector[i]));
+                }
+            }
+
+            for (int i = 0; i < rangeVector.Length; i++)
+            {
+                if (rangeVector[i] != 0)
+                    range.Add(new Measure(Math.Round(timeLocalVector[i], 2), rangeVector[i]));
+            }
+
 
             wb = xlsApp.Workbooks.Open(filenameOptic,
                 0, true, 5, "", "", true, XlPlatform.xlWindows, "\t", false, false, 0, true);
@@ -74,76 +97,89 @@ namespace MNK2dim
 
             for (int i = 0; i < timeOpticVector.Length; i++)
             {
-                optic.Add(new Measure(timeOpticVector[i], azimutOpticVector[i], ugolMestaOpticVector[i]));
+                opticAzimut.Add(new Measure(timeOpticVector[i], azimutOpticVector[i]));
+                opticUgolMesta.Add(new Measure(timeOpticVector[i], ugolMestaOpticVector[i]));
             }
 
             CalculateByRange(20000);
             CalculateByRange(10000);
             CalculateByRange(5000);
-            CalculateByRange(3000);
-            CalculateByRange(2000);
+            //CalculateByRange(3000);
+            //CalculateByRange(2000);
 
 
             Console.ReadKey();
         }
-            
+
+        //i - Time
+        static int getNearestAfter(List<Measure> list, double i)
+        {
+            int k = 0;
+            while (Math.Abs(i - list[k].getTime()) > 0.5 && k < list.Count - 1)
+            {
+                k++;
+            }
+            return k;
+        }
+
         static void CalculateByRange(double rang)
         {
             Console.WriteLine("Расстояние = " + rang);
             int sizeLocal = 5;
+
             double[] targetAzimutLocal = new double[sizeLocal];
             double[] targetUgolMestaLocal = new double[sizeLocal];
-            double[] targetTimeLocal = new double[sizeLocal];
+            double[] targetTimeAzimutLocal = new double[sizeLocal];
+            double[] targetTimeUgolMestaLocal = new double[sizeLocal];
 
-
-            int targetTimeStart = 0;
-            int targetTimeEnd = 0;
-            for (int i = 0; i < radio.Count; i++)
+            double targetTimeStart = 0;
+            double targetTimeEnd = 0;
+            for (int i = 0; i < range.Count; i++)
             {
-                if (radio[i].getRange() == rang)
+                if (range[i].getMeasure() == rang)
                 {
-                    targetTimeStart = (int)radio[i].getTime();
-                    if (radio.Count - 1 - i <= sizeLocal)
+                    targetTimeStart = range[i].getTime();
+                    if (range.Count - 1 - i <= sizeLocal)
                     {
-                        sizeLocal = radio.Count - i - 1;
+                        sizeLocal = range.Count - i - 1;
                         targetAzimutLocal = new double[sizeLocal];
                         targetUgolMestaLocal = new double[sizeLocal];
-                        targetTimeLocal = new double[sizeLocal];
+                        targetTimeAzimutLocal = new double[sizeLocal];
                     }
+
+                    //int tempI = i;
+                    int temp = getNearestAfter(radioAzimut, range[i].getTime());
                     for (int j = 0; j < sizeLocal; j++)
                     {
-                        try
+                        targetTimeAzimutLocal[j] = radioAzimut[temp++].getTime();
+                        targetAzimutLocal[j] = radioAzimut[temp++].getMeasure();
+
+                        if (targetAzimutLocal[j] > 6)
                         {
-                            targetTimeLocal[j] = radio[i++].getTime();
-                            targetAzimutLocal[j] = radio[i++].getAzimut();
-                            targetUgolMestaLocal[j] = radio[i++].getUgolMesta();
+                            targetAzimutLocal[j] = targetAzimutLocal[j] - (360 * Math.PI / 180);
                         }
-                        catch (ArgumentOutOfRangeException ex)
-                        {
-                            targetTimeLocal[j] = radio[i - 3].getTime();
-                            targetAzimutLocal[j] = radio[i - 3].getAzimut();
-                            targetUgolMestaLocal[j] = radio[i - 3].getUgolMesta();
-                            //Console.WriteLine(ex.StackTrace);
-                            break;
-                        }
-                        finally
-                        {
-                            if (targetAzimutLocal[j] > 6.25)
-                            {
-                                targetAzimutLocal[j] = targetAzimutLocal[j] - (360 * Math.PI / 180);
-                            }
-                        }
-                        
                     }
-                    targetTimeEnd = (int)targetTimeLocal[targetTimeLocal.Length - 1];
+
+                    targetTimeEnd = Math.Round(Math.Max(targetTimeEnd, targetTimeAzimutLocal[sizeLocal - 1]), 2);
+
+                    temp = getNearestAfter(radioUgolMesta, range[i].getTime());
+                    for (int j = 0; j < sizeLocal; j++)
+                    {
+                        targetTimeUgolMestaLocal[j] = radioUgolMesta[temp++].getTime();
+                        targetUgolMestaLocal[j] = radioUgolMesta[temp++].getMeasure();
+                    }
+                
+                    targetTimeEnd = Math.Round(Math.Max(targetTimeEnd, targetTimeUgolMestaLocal[sizeLocal - 1]), 2);
+             
+
                     break;
                 }
             }
-                
-            MNK mnkLocalAzimut = new MNK(targetTimeLocal, targetAzimutLocal, sizeLocal);
+
+            MNK mnkLocalAzimut = new MNK(targetTimeAzimutLocal, targetAzimutLocal, sizeLocal);
             double[] answerLocalAzimut = mnkLocalAzimut.Calculate();
 
-            MNK mnkLocalUgolMesta = new MNK(targetTimeLocal, targetUgolMestaLocal, sizeLocal);
+            MNK mnkLocalUgolMesta = new MNK(targetTimeUgolMestaLocal, targetUgolMestaLocal, sizeLocal);
             double[] answerLocalUgolMesta = mnkLocalUgolMesta.Calculate();
 
             Console.WriteLine("Radio");
@@ -157,24 +193,19 @@ namespace MNK2dim
             int indexStart = 0;
             int indexEnd = 0;
             bool found = false;
-            for (int i = 0; i < optic.Count; i++)
+            for (int i = 0; i < opticAzimut.Count; i++)
             {
-                if (Math.Round(optic[i].getTime()) == targetTimeStart && !found)
+                if (indexStart == 0 && !found)
                 {
-                    indexStart = i;
+                    indexStart = getNearestAfter(opticAzimut, targetTimeStart);
                     found = true;
                 }
-                if (Math.Round(optic[i].getTime()) == targetTimeEnd)
+                if (indexEnd == 0)
                 {
-                    indexEnd = i;
+                    indexEnd = getNearestAfter(opticAzimut, targetTimeEnd);
                     sizeOptic = indexEnd - indexStart + 1;
                     break;
                 }
-            }
-            if (indexEnd == 0)
-            {
-                indexEnd = optic.Count - 1;
-                sizeOptic = indexEnd - indexStart + 1;
             }
 
             Console.WriteLine("Start {0}, End {1}", indexStart, indexEnd);
@@ -182,11 +213,12 @@ namespace MNK2dim
             double[] targetAzimutOptic = new double[sizeOptic];
             double[] targetUgolMestaOptic = new double[sizeOptic];
             double[] targetTimeOptic = new double[sizeOptic];
+
             for (int i = indexStart, j = 0; i < indexEnd; i++, j++)
             {
-                targetAzimutOptic[j] = optic[i].getAzimut();
-                targetUgolMestaOptic[j] = optic[i].getUgolMesta();
-                targetTimeOptic[j] = optic[i].getTime();
+                targetAzimutOptic[j] = opticAzimut[i].getMeasure();
+                targetUgolMestaOptic[j] = opticUgolMesta[i].getMeasure();
+                targetTimeOptic[j] = opticAzimut[i].getTime();
 
                 if (targetAzimutOptic[j] > 6)
                 {
@@ -208,15 +240,15 @@ namespace MNK2dim
             Console.WriteLine("DELTA");
 
             double[] statisticAzimut = getStatistic(answerLocalAzimut, targetAzimutOptic, targetTimeOptic, sizeOptic);
-            double[] statisticUgolMesta = getStatistic(answerLocalUgolMesta,targetUgolMestaOptic, targetTimeOptic, sizeOptic);
+            double[] statisticUgolMesta = getStatistic(answerLocalUgolMesta, targetUgolMestaOptic, targetTimeOptic, sizeOptic);
 
             Console.WriteLine("Мат. ожидание\t{0}\t{1}", statisticAzimut[0], statisticUgolMesta[0]);
             Console.WriteLine("Отклонение\t{0}\t{1}", statisticAzimut[1], statisticUgolMesta[1]);
 
             Console.WriteLine("\n/////////////////////////////////////////////////\n");
 
-            ProcessStartInfo start = new ProcessStartInfo();
-            start.FileName = pythonScriptString;
+            //ProcessStartInfo start = new ProcessStartInfo();
+            //start.FileName = pythonScriptString;
 
         }
 
