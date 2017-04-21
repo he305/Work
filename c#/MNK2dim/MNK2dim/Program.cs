@@ -8,6 +8,14 @@ namespace MNK2dim
 {
     class Program
     {
+
+        //const
+
+        const int sizeLocal = 5;
+        const int e = 2; //Для округления времени
+        const int minTime = 3; //Для нахождения ближайшего по времени измерения
+
+
         //Radio
         static List<Measure> radioAzimut = new List<Measure>();
         static List<Measure> radioUgolMesta = new List<Measure>();
@@ -19,6 +27,13 @@ namespace MNK2dim
 
         static String pythonScriptString = @"/../graph.py";
 
+        /// <summary>
+        /// Возвращет требуемую колонну таблицы
+        /// </summary>
+        /// <param name="ws">Имя листа</param>
+        /// <param name="i">Номер колонны</param>
+        /// <param name="skipZero">Пропуск нулевых значений</param>
+        /// <returns></returns>
         static double[] getExcelColumn(Worksheet ws, int i, bool skipZero)
         {
             Range range = ws.UsedRange.Columns[i];
@@ -64,7 +79,7 @@ namespace MNK2dim
                 if (azimutLocalVector[i] != 0)
                 {
                     azimutLocalVector[i] = azimutLocalVector[i] * Math.PI / 180;
-                    radioAzimut.Add(new Measure(Math.Round(timeLocalVector[i], 2), azimutLocalVector[i]));
+                    radioAzimut.Add(new Measure(Math.Round(timeLocalVector[i], e), azimutLocalVector[i]));
                 }
             }
 
@@ -75,14 +90,14 @@ namespace MNK2dim
                 if (ugolMestaLocalVector[i] != 0)
                 {
                     ugolMestaLocalVector[i] = ugolMestaLocalVector[i] * Math.PI / 180;
-                    radioUgolMesta.Add(new Measure(Math.Round(timeLocalVector[i], 2), ugolMestaLocalVector[i]));
+                    radioUgolMesta.Add(new Measure(Math.Round(timeLocalVector[i], e), ugolMestaLocalVector[i]));
                 }
             }
 
             for (int i = 0; i < rangeVector.Length; i++)
             {
                 if (rangeVector[i] != 0)
-                    range.Add(new Measure(Math.Round(timeLocalVector[i], 2), rangeVector[i]));
+                    range.Add(new Measure(Math.Round(timeLocalVector[i], e), rangeVector[i]));
             }
 
 
@@ -104,29 +119,51 @@ namespace MNK2dim
             CalculateByRange(20000);
             CalculateByRange(10000);
             CalculateByRange(5000);
-            //CalculateByRange(3000);
-            //CalculateByRange(2000);
+            CalculateByRange(3000);
+            CalculateByRange(2000);
 
 
             Console.ReadKey();
         }
-
-        //i - Time
-        static int getNearestAfter(List<Measure> list, double i)
+        
+        /// <summary>
+        /// Класс нахождения номера элемента списка list с ближайшем временем относительно параметра targetTime
+        /// </summary>
+        /// <param name="list">Список, требующий нахождения ближайшего коэффициента</param>
+        /// <param name="targetTime">Целевое время</param>
+        /// <returns>Возвращает номер элемента списка с ближайшим времение, иначе возвращает 0</returns>
+        static int getNearest(List<Measure> list, double targetTime)
         {
-            int k = 0;
-            while (Math.Abs(i - list[k].getTime()) > 0.5 && k < list.Count - 1)
+            double MAX = Double.MaxValue;
+
+            for (int i = 0; i < list.Count; i++)
             {
-                k++;
+                if (Math.Abs(targetTime - list[i].getTime()) < minTime)
+                {
+                    if (MAX > Math.Abs(targetTime - list[i].getTime()))
+                    {
+                        MAX = Math.Abs(targetTime - list[i].getTime());
+                    }
+                    else
+                    {
+                        return i - 1;
+                    }
+                }
             }
-            return k;
+
+            //Hope never return
+            return 0;
         }
 
+        /// <summary>
+        /// Собирает и выводит статистику по заданному расстоянию
+        /// </summary>
+        /// <param name="rang">Целевое расстояние</param>
         static void CalculateByRange(double rang)
         {
             Console.WriteLine("Расстояние = " + rang);
             int sizeLocal = 5;
-
+            
             double[] targetAzimutLocal = new double[sizeLocal];
             double[] targetUgolMestaLocal = new double[sizeLocal];
             double[] targetTimeAzimutLocal = new double[sizeLocal];
@@ -148,7 +185,7 @@ namespace MNK2dim
                     }
 
                     //int tempI = i;
-                    int temp = getNearestAfter(radioAzimut, range[i].getTime());
+                    int temp = getNearest(radioAzimut, range[i].getTime());
                     for (int j = 0; j < sizeLocal; j++)
                     {
                         targetTimeAzimutLocal[j] = radioAzimut[temp++].getTime();
@@ -162,7 +199,15 @@ namespace MNK2dim
 
                     targetTimeEnd = Math.Round(Math.Max(targetTimeEnd, targetTimeAzimutLocal[sizeLocal - 1]), 2);
 
-                    temp = getNearestAfter(radioUgolMesta, range[i].getTime());
+
+                    temp = getNearest(radioUgolMesta, range[i].getTime());
+
+                    //Если temp = 0 => не нашлись измерения в диапазоне < minTime секунд
+                    if (temp == 0)
+                    {
+                        Console.WriteLine("ИЗМЕРЕНИЯ УГЛА МЕСТА ОТСУТСТВУЮТ");
+                    }
+                    //
                     for (int j = 0; j < sizeLocal; j++)
                     {
                         targetTimeUgolMestaLocal[j] = radioUgolMesta[temp++].getTime();
@@ -197,12 +242,12 @@ namespace MNK2dim
             {
                 if (indexStart == 0 && !found)
                 {
-                    indexStart = getNearestAfter(opticAzimut, targetTimeStart);
+                    indexStart = getNearest(opticAzimut, targetTimeStart);
                     found = true;
                 }
                 if (indexEnd == 0)
                 {
-                    indexEnd = getNearestAfter(opticAzimut, targetTimeEnd);
+                    indexEnd = getNearest(opticAzimut, targetTimeEnd);
                     sizeOptic = indexEnd - indexStart + 1;
                     break;
                 }
@@ -256,8 +301,7 @@ namespace MNK2dim
         {
             /*
              * statistic[0] = matOjid; 
-             * statistic[1] = dispersia;
-             * 
+             * statistic[1] = dispersia
              */
             double[] statistic = new double[2];
             double matOjidDeltaPower2 = 0;
