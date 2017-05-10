@@ -78,8 +78,9 @@ namespace MNK2dim
             {
                 if (azimutLocalVector[i] != 0)
                 {
-                    azimutLocalVector[i] = azimutLocalVector[i] * Math.PI / 180;
+                    azimutLocalVector[i] = Math azimutLocalVector[i] * Math.PI / 180;
                     radioAzimut.Add(new Measure(Math.Round(timeLocalVector[i], e), azimutLocalVector[i]));
+                    
                 }
             }
 
@@ -117,13 +118,63 @@ namespace MNK2dim
             }
 
             CalculateByRange(20000);
-            CalculateByRange(10000);
-            CalculateByRange(5000);
-            CalculateByRange(3000);
-            CalculateByRange(2000);
+            //CalculateByRange(10000);
+            //CalculateByRange(5000);
+            //CalculateByRange(3000);
+            //CalculateByRange(2000);
 
+            getSkolz(20000, 5);
 
             Console.ReadKey();
+        }
+
+        private static void getSkolz(double rang, int steps)
+        {
+            int stepCount = 0;
+            int sizeLocal = 5;
+            List<double> timeArr = new List<double>();
+            List<double> azimutArr = new List<double>();
+            double targetTimeStart;
+
+            int temp = 0;
+            for (int i = 0; i < range.Count; i++)
+            {
+                if (range[i].getMeasure() == rang)
+                {
+                    targetTimeStart = range[i].getMeasure();
+                
+                    temp = getNearest(radioAzimut, range[i].getTime());
+                    for (int j = 0; j < sizeLocal; j++)
+                    {
+
+                        timeArr.Add(radioAzimut[temp].getTime());
+                        azimutArr.Add(radioAzimut[temp].getMeasure());
+
+                        temp++;
+                        if (azimutArr[j] > 6)
+                        {
+                            azimutArr[j] = azimutArr[j] - (360 * Math.PI / 180);
+                        }
+                    }
+                    
+                }
+            }
+
+            for (int i = 0; i < steps; i++)
+            {
+                MNK mnkLocalAzimut = new MNK(timeArr.ToArray(), azimutArr.ToArray(), sizeLocal);
+                double[] answerLocalAzimut = mnkLocalAzimut.Calculate();
+
+                //Console.WriteLine(answerLocalAzimut[1] + "\t" + answerLocalAzimut[0]);
+                Console.WriteLine("{0:E}\t{1:E}", answerLocalAzimut[1], answerLocalAzimut[0]);
+                timeArr.RemoveAt(0);
+                timeArr.Add(radioAzimut[temp].getTime());
+
+                azimutArr.RemoveAt(0);
+                azimutArr.Add(radioAzimut[temp].getMeasure());
+
+                temp++;
+            }
         }
         
         /// <summary>
@@ -188,8 +239,9 @@ namespace MNK2dim
                     int temp = getNearest(radioAzimut, range[i].getTime());
                     for (int j = 0; j < sizeLocal; j++)
                     {
-                        targetTimeAzimutLocal[j] = radioAzimut[temp++].getTime();
-                        targetAzimutLocal[j] = radioAzimut[temp++].getMeasure();
+                        targetTimeAzimutLocal[j] = radioAzimut[temp].getTime();
+                        targetAzimutLocal[j] = radioAzimut[temp].getMeasure();
+                        temp++;
 
                         if (targetAzimutLocal[j] > 6)
                         {
@@ -210,8 +262,9 @@ namespace MNK2dim
                     //
                     for (int j = 0; j < sizeLocal; j++)
                     {
-                        targetTimeUgolMestaLocal[j] = radioUgolMesta[temp++].getTime();
-                        targetUgolMestaLocal[j] = radioUgolMesta[temp++].getMeasure();
+                        targetTimeUgolMestaLocal[j] = radioUgolMesta[temp].getTime();
+                        targetUgolMestaLocal[j] = radioUgolMesta[temp].getMeasure();
+                        temp++;
                     }
                 
                     targetTimeEnd = Math.Round(Math.Max(targetTimeEnd, targetTimeUgolMestaLocal[sizeLocal - 1]), 2);
