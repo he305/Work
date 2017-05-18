@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace MNK2dim
 {
@@ -49,11 +50,12 @@ namespace MNK2dim
             return vector;
         }
 
+        [STAThread]
         static void Main(string[] args)
         {
             string filenameLocal = AppDomain.CurrentDomain.BaseDirectory + "../../radio.xlsx";
             string filenameOptic = AppDomain.CurrentDomain.BaseDirectory + "../../optic.xlsx";
-            Application xlsApp = new Application();
+            var xlsApp = new Microsoft.Office.Interop.Excel.Application();
 
             if (xlsApp == null)
             {
@@ -78,7 +80,7 @@ namespace MNK2dim
             {
                 if (azimutLocalVector[i] != 0)
                 {
-                    azimutLocalVector[i] = Math azimutLocalVector[i] * Math.PI / 180;
+                    azimutLocalVector[i] = azimutLocalVector[i] * Math.PI / 180;
                     radioAzimut.Add(new Measure(Math.Round(timeLocalVector[i], e), azimutLocalVector[i]));
                     
                 }
@@ -117,8 +119,8 @@ namespace MNK2dim
                 opticUgolMesta.Add(new Measure(timeOpticVector[i], ugolMestaOpticVector[i]));
             }
 
-            CalculateByRange(20000);
-            //CalculateByRange(10000);
+            //CalculateByRange(20000);
+            CalculateByRange(10000);
             //CalculateByRange(5000);
             //CalculateByRange(3000);
             //CalculateByRange(2000);
@@ -210,6 +212,8 @@ namespace MNK2dim
         /// Собирает и выводит статистику по заданному расстоянию
         /// </summary>
         /// <param name="rang">Целевое расстояние</param>
+        /// 
+        [STAThread]
         static void CalculateByRange(double rang)
         {
             Console.WriteLine("Расстояние = " + rang);
@@ -272,6 +276,11 @@ namespace MNK2dim
 
                     break;
                 }
+            }
+
+            for (int i = 0; i < targetAzimutLocal.Length; i++)
+            {
+                Console.WriteLine(targetAzimutLocal[i]);
             }
 
             MNK mnkLocalAzimut = new MNK(targetTimeAzimutLocal, targetAzimutLocal, sizeLocal);
@@ -337,6 +346,9 @@ namespace MNK2dim
 
             Console.WriteLine("DELTA");
 
+
+            ShowGraph(answerLocalAzimut, targetTimeOptic, targetAzimutOptic);
+
             double[] statisticAzimut = getStatistic(answerLocalAzimut, targetAzimutOptic, targetTimeOptic, sizeOptic);
             double[] statisticUgolMesta = getStatistic(answerLocalUgolMesta, targetUgolMestaOptic, targetTimeOptic, sizeOptic);
 
@@ -348,6 +360,16 @@ namespace MNK2dim
             //ProcessStartInfo start = new ProcessStartInfo();
             //start.FileName = pythonScriptString;
 
+        }
+
+        [STAThread]
+        private static void ShowGraph(double[] answer, double[] targetTimeOptic, double[] targetMeasureOptic)
+        {
+            //Graph
+            System.Windows.Forms.Application.EnableVisualStyles();
+            System.Windows.Forms.Application.Run(new Graph(answer, targetTimeOptic, targetMeasureOptic));
+            //graph.DrawGraph();
+            Console.ReadKey();
         }
 
         private static double[] getStatistic(double[] answerLocal, double[] targetOptic, double[] targetTime, int size)
