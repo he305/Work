@@ -15,6 +15,10 @@ namespace MNK2dim
         private double[] answer;
         private double[] targetTimeOptic;
         private double[] targetMeasureOptic;
+
+        private double[] targetTimeLocal;
+        private double[] targetMeasureLocal;
+ 
         public Graph(double[] answer, double[] targetTimeOptic, double[] targetMeasureOptic)
         {
             InitializeComponent();
@@ -22,30 +26,28 @@ namespace MNK2dim
             this.answer = answer;
             this.targetTimeOptic = targetTimeOptic;
             this.targetMeasureOptic = targetMeasureOptic;
-            DrawGraph();
+            DrawGraph(false);
         }
 
-        public void DrawGraph()
+        public Graph(double[] answer, double[] targetTimeOptic, double[] targetMeasureOptic, double[] targetTimeLocal, double[] targetMeasureLocal)
         {
-            for (int i = 0; i < targetTimeOptic.Length; i++)
-            {
-                Console.WriteLine(targetTimeOptic[i] + "\t" + targetMeasureOptic[i]);
+            InitializeComponent();
+            this.answer = answer;
+            this.targetMeasureOptic = targetMeasureOptic;
+            this.targetTimeOptic = targetTimeOptic;
+            this.targetTimeLocal = targetTimeLocal;
+            this.targetMeasureLocal = targetMeasureLocal;
+            DrawGraph(true);
+        }
 
-            }
-
+        public void DrawGraph(bool full)
+        {
             chart.Series[0].Points.Clear();
             chart.ResetAutoValues();
-            //chart.ChartAreas[0].AxisX.Minimum = targetTimeOptic[0];
-            //chart.ChartAreas[0].AxisX.Maximum = targetTimeOptic[targetTimeOptic.Length - 1];
-            
-            //double[] x = { 0, 1, 2, 3 };
-            //double[] y = { 0, 1, 2, 3 };
-
             for (int i = 0; i < targetTimeOptic.Length; i++)
             {
                 chart.Series[0].Points.AddXY(targetTimeOptic[i], targetMeasureOptic[i]);
             }
-            chart.Series[0].Points.RemoveAt(chart.Series[0].Points.Count - 1);
 
             double[] y = new double[targetTimeOptic.Length];
 
@@ -55,7 +57,17 @@ namespace MNK2dim
 
                 chart.Series[1].Points.AddXY(targetTimeOptic[i], y[i]);
             }
+            chart.Series[1].BorderWidth = 10;
             chart.Series[1].Points.RemoveAt(chart.Series[1].Points.Count - 1);
+
+            if (full)
+            {
+                chart.Series[2].Points.Clear();
+                for (int i = 0; i < targetTimeLocal.Length; i++)
+                {
+                    chart.Series[2].Points.AddXY(targetTimeLocal[i], targetMeasureLocal[i]);
+                }
+            }
         }
     }
 }
