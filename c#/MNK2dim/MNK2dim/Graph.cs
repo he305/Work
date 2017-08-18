@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace MNK2dim
 {
@@ -48,6 +40,7 @@ namespace MNK2dim
             {
                 chart.Series[0].Points.AddXY(targetTimeOptic[i], targetMeasureOptic[i]);
             }
+            chart.Series[0].Points.RemoveAt(chart.Series[0].Points.Count - 1);
 
             double[] y = new double[targetTimeOptic.Length];
 
@@ -57,7 +50,7 @@ namespace MNK2dim
 
                 chart.Series[1].Points.AddXY(targetTimeOptic[i], y[i]);
             }
-            chart.Series[1].BorderWidth = 10;
+            chart.Series[1].BorderWidth = 5;
             chart.Series[1].Points.RemoveAt(chart.Series[1].Points.Count - 1);
 
             if (full)

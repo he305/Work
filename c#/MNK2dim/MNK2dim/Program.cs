@@ -2,8 +2,6 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Windows.Forms;
 
 namespace MNK2dim
 {
@@ -39,8 +37,6 @@ namespace MNK2dim
         {
             Range range = ws.UsedRange.Columns[i];
             Array arr = (Array)range.Cells.Value;
-
-            List<Measure> measures = new List<Measure>();
 
             double[] vector;
             if (skipZero)
@@ -81,7 +77,7 @@ namespace MNK2dim
                 {
                     azimutLocalVector[i] = azimutLocalVector[i] * Math.PI / 180;
                     radioAzimut.Add(new Measure(Math.Round(timeLocalVector[i], e), azimutLocalVector[i]));
-                    
+                       
                 }
             }
 
@@ -114,6 +110,8 @@ namespace MNK2dim
 
             for (int i = 0; i < timeOpticVector.Length; i++)
             {
+                //azimutOpticVector[i] = azimutOpticVector[i] * Math.PI / 180;
+                //ugolMestaOpticVector[i] = ugolMestaOpticVector[i] * Math.PI / 180;
                 opticAzimut.Add(new Measure(timeOpticVector[i], azimutOpticVector[i]));
                 opticUgolMesta.Add(new Measure(timeOpticVector[i], ugolMestaOpticVector[i]));
             }
@@ -122,8 +120,8 @@ namespace MNK2dim
             CalculateByRange(10000);
             CalculateByRange(5000);
             CalculateByRange(3000);
-            CalculateByRange(2000);
-            CalculateByRange(1200);
+            //CalculateByRange(2000);
+            //CalculateByRange(1200);
 
             //getSkolz(20000, 5);
 
@@ -132,7 +130,6 @@ namespace MNK2dim
 
         private static void getSkolz(double rang, int steps)
         {
-            int stepCount = 0;
             int sizeLocal = 5;
             List<double> timeArr = new List<double>();
             List<double> azimutArr = new List<double>();
@@ -167,7 +164,6 @@ namespace MNK2dim
                 MNK mnkLocalAzimut = new MNK(timeArr.ToArray(), azimutArr.ToArray(), sizeLocal);
                 double[] answerLocalAzimut = mnkLocalAzimut.Calculate();
 
-                //Console.WriteLine(answerLocalAzimut[1] + "\t" + answerLocalAzimut[0]);
                 Console.WriteLine("{0:E}\t{1:E}", answerLocalAzimut[1], answerLocalAzimut[0]);
                 timeArr.RemoveAt(0);
                 timeArr.Add(radioAzimut[temp].getTime());
@@ -238,7 +234,7 @@ namespace MNK2dim
                         targetUgolMestaLocal = new double[sizeLocal];
                         targetTimeAzimutLocal = new double[sizeLocal];
                     }
-
+                    
                     //int tempI = i;
                     int temp = getNearest(radioAzimut, range[i].getTime());
                     for (int j = 0; j < sizeLocal; j++)
@@ -276,11 +272,6 @@ namespace MNK2dim
 
                     break;
                 }
-            }
-
-            for (int i = 0; i < targetAzimutLocal.Length; i++)
-            {
-                //Console.WriteLine(targetAzimutLocal[i]);
             }
 
             int sizeOptic = 100;
@@ -375,18 +366,10 @@ namespace MNK2dim
 
             for (int i = 0; i < size; i++)
             {
-                //Console.WriteLine(answerLocal[1] * targetTime[i] + answerLocal[0] + "\t" + targetOptic[i] + "\t" + i);
                 deltaVectorAzimut[i] = (answerLocal[1] * targetTime[i] + answerLocal[0]) - targetOptic[i];
                 statistic[0] += deltaVectorAzimut[i];
                 matOjidDeltaPower2 += Math.Pow(deltaVectorAzimut[i], 2);
             }
-
-            //Console.WriteLine();
-            for (int i = 0; i < size; i++)
-            {
-                //Console.WriteLine(deltaVectorAzimut[i] + "\t" + i);
-            }
-
 
             statistic[0] /= size;
             matOjidDeltaPower2 /= size;
