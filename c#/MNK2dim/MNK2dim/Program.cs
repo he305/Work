@@ -339,9 +339,24 @@ namespace MNK2dim
             //ProcessStartInfo start = new ProcessStartInfo();
             //start.FileName = pythonScriptString;
 
-
+            //int div = 2;
+            //int step = 0;
+            //int indexOld = 0;
+            //while (step < div)
+            //{
+            //    double[] targetTimeOpticDiv2 = new double[targetTimeOptic.Length / div];
+            //    double[] targetAzimutOpticDiv2 = new double[targetAzimutOptic.Length / div];
+            //    for (int j = 0; j < targetTimeOpticDiv2.Length; j++)
+            //    {
+            //        targetTimeOpticDiv2[j] = targetTimeOptic[indexOld];
+            //        targetAzimutOpticDiv2[j] = targetAzimutOptic[indexOld];
+            //        indexOld++;
+            //    }
+            //    ShowGraph(answerLocalAzimut, targetTimeOpticDiv2, targetAzimutOpticDiv2);
+            //    step++;
+            //}
             ShowGraph(answerLocalAzimut, targetTimeOptic, targetAzimutOptic, targetTimeAzimutLocal, targetAzimutLocal);
-            Console.ReadKey();
+            //Console.ReadKey();
         }
 
         [STAThread]
@@ -350,6 +365,15 @@ namespace MNK2dim
             //Graph
             System.Windows.Forms.Application.EnableVisualStyles();
             System.Windows.Forms.Application.Run(new Graph(answer, targetTimeOptic, targetMeasureOptic, targetTimeLocal, targetMeasureLocal));
+            //graph.DrawGraph();
+        }
+
+        [STAThread]
+        private static void ShowGraph(double[] answer, double[] targetTimeOptic, double[] targetMeasureOptic)
+        {
+            //Graph
+            System.Windows.Forms.Application.EnableVisualStyles();
+            System.Windows.Forms.Application.Run(new Graph(answer, targetTimeOptic, targetMeasureOptic));
             //graph.DrawGraph();
         }
 
@@ -364,6 +388,7 @@ namespace MNK2dim
 
             double[] deltaVectorAzimut = new double[size];
 
+            statistic[0] = 0;
             for (int i = 0; i < size; i++)
             {
                 deltaVectorAzimut[i] = (answerLocal[1] * targetTime[i] + answerLocal[0]) - targetOptic[i];
@@ -374,6 +399,14 @@ namespace MNK2dim
             statistic[0] /= size;
             matOjidDeltaPower2 /= size;
 
+            //double sum = 0;
+            //for (int i = 0; i < size; i++)
+            //{
+            //    sum += Math.Pow(deltaVectorAzimut[i] - statistic[0], 2);
+            //}
+
+            //sum /= size;
+            //statistic[1] = Math.Sqrt(sum);
             statistic[1] = Math.Sqrt(matOjidDeltaPower2 - Math.Pow(statistic[0], 2));
 
             return statistic;

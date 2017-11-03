@@ -1,4 +1,6 @@
 ﻿using System.Windows.Forms;
+using System;
+using System.Linq;
 
 namespace MNK2dim
 {
@@ -18,6 +20,9 @@ namespace MNK2dim
             this.answer = answer;
             this.targetTimeOptic = targetTimeOptic;
             this.targetMeasureOptic = targetMeasureOptic;
+            chart.ChartAreas[0].AxisY.Minimum = targetMeasureOptic[0] - 0.004;
+            chart.ChartAreas[0].AxisY.Maximum = targetMeasureOptic[0] + 0.004;
+            chart.ChartAreas[0].AxisY.Interval = 0.001;
             DrawGraph(false);
         }
 
@@ -29,6 +34,25 @@ namespace MNK2dim
             this.targetTimeOptic = targetTimeOptic;
             this.targetTimeLocal = targetTimeLocal;
             this.targetMeasureLocal = targetMeasureLocal;
+
+            targetMeasureOptic = targetMeasureOptic.Where(val => val != 0).ToArray();
+
+            double max = targetMeasureOptic.Max();
+
+            if (max < targetMeasureLocal.Max())
+                max = targetMeasureLocal.Max();
+
+            double min = targetMeasureOptic.Min();
+
+            if (min > targetMeasureLocal.Min())
+                min = targetMeasureLocal.Min();
+
+            chart.ChartAreas[0].AxisY.Minimum = min;
+            chart.ChartAreas[0].AxisY.Maximum = max;
+
+            chart.ChartAreas[0].AxisX.Minimum = 0;
+            chart.ChartAreas[0].AxisX.Maximum = targetTimeLocal.Max();
+
             DrawGraph(true);
         }
 
