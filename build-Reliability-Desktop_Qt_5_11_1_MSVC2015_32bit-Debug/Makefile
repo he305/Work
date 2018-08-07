@@ -229,6 +229,7 @@ Makefile: ..\Reliability\Reliability.pro ..\..\..\Qt\Qt5.11.1\5.11.1\msvc2015\mk
 		..\..\..\Qt\Qt5.11.1\5.11.1\msvc2015\mkspecs\features\qt_config.prf \
 		..\..\..\Qt\Qt5.11.1\5.11.1\msvc2015\mkspecs\win32-msvc\qmake.conf \
 		..\..\..\Qt\Qt5.11.1\5.11.1\msvc2015\mkspecs\features\spec_post.prf \
+		.qmake.stash \
 		..\..\..\Qt\Qt5.11.1\5.11.1\msvc2015\mkspecs\features\exclusive_builds.prf \
 		..\..\..\Qt\Qt5.11.1\5.11.1\msvc2015\mkspecs\common\msvc-version.conf \
 		..\..\..\Qt\Qt5.11.1\5.11.1\msvc2015\mkspecs\features\toolchain.prf \
@@ -412,6 +413,7 @@ Makefile: ..\Reliability\Reliability.pro ..\..\..\Qt\Qt5.11.1\5.11.1\msvc2015\mk
 ..\..\..\Qt\Qt5.11.1\5.11.1\msvc2015\mkspecs\features\qt_config.prf:
 ..\..\..\Qt\Qt5.11.1\5.11.1\msvc2015\mkspecs\win32-msvc\qmake.conf:
 ..\..\..\Qt\Qt5.11.1\5.11.1\msvc2015\mkspecs\features\spec_post.prf:
+.qmake.stash:
 ..\..\..\Qt\Qt5.11.1\5.11.1\msvc2015\mkspecs\features\exclusive_builds.prf:
 ..\..\..\Qt\Qt5.11.1\5.11.1\msvc2015\mkspecs\common\msvc-version.conf:
 ..\..\..\Qt\Qt5.11.1\5.11.1\msvc2015\mkspecs\features\toolchain.prf:

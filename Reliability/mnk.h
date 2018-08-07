@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <math.h>
+#include <ludecompose.h>
 
 class MNK
 {

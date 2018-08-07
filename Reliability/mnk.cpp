@@ -34,13 +34,15 @@ MNK::MNK(std::vector<double> xVector,
     }
 }
 
-std::vector MNK::Calculate()
+std::vector<double> MNK::Calculate()
 {
-    size_t polynomeSize = 2;
+    int polynomeSize = 2;
     //Assuming it's always 2 for polynome size
-    double a[polynomeSize][polynomeSize];
+    std::vector<std::vector<double> > a(polynomeSize);
+
     for (size_t i = 0; i < polynomeSize; i++)
     {
+        a[i].resize(polynomeSize);
         for (size_t j = 0; j < polynomeSize; j++)
         {
             double sum = 0;
@@ -63,4 +65,16 @@ std::vector MNK::Calculate()
         z[i] = sum;
     }
 
+    LUDecompose lu(a, z, polynomeSize);
+    auto answer = lu.lupSolve();
+
+    for (int i = 1; i >= 0; i--)
+    {
+        if (fabs(answer[i]) < 0.0001)
+        {
+            answer[i] = 0;
+        }
+    }
+
+    return answer;
 }

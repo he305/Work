@@ -1,32 +1,27 @@
-#include <math.h>
-#include <iostream>
-
 #ifndef LUDECOMPOSE_H
 #define LUDECOMPOSE_H
 
+#include <math.h>
+#include <iostream>
+#include <vector>
+#include <iostream>
 
 class LUDecompose
 {
 public:
-    LUDecompose(double**, double*, int);
-    ~LUDecompose();
+    LUDecompose(std::vector<std::vector<double> > matrix, std::vector<double> vector, int size);
 
-    double* lupSolve();
+    std::vector<double> lupSolve();
 private:
-    int MaxInColumn(double** mat, int i, int size);
-    int* lupDecompose(double** matrix, int size);
-    void swapRow(double** mat, int size1, int size2);
-    double* forwardSub(double** mat, double* vec, int* p, int size);
-    double* backSub(double** mat, double* y, int size);
+    int MaxInColumn(std::vector<std::vector<double>> mat, int i);
+    std::vector<int> lupDecompose(std::vector<std::vector<double> > &matrix);
+    void swapRow(std::vector<std::vector<double> > &mat, int size1, int size2);
+    std::vector<double> forwardSub(std::vector<std::vector<double> > mat, std::vector<double> vec, std::vector<int> p);
+    std::vector<double> backSub(std::vector<std::vector<double> > mat, std::vector<double> y);
 
-    double** createMatrix(int size);
-    double* createVector(int size);
-    void freeMatrix(double** matrix, int size);
-    void freeVector(double* vector, int size);
-    double** copyMatrix(double**, int);
-    double* copyVector(double*, int);
-    double** matrix;
-    double* vector;
+
+    std::vector<std::vector<double> > matrix;
+    std::vector<double> vector;
     int size;
 };
 

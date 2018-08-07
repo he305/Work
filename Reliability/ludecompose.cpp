@@ -1,93 +1,53 @@
 #include "ludecompose.h"
 
-void LUDecompose::freeMatrix(double** mat, int size)
-{
-    for (int i = 0; i < size; i++)
-    {
-        delete mat[i];
-    }
-    delete mat;
-}
-
-void LUDecompose::freeVector(double* vec, int size)
-{
-    delete vec;
-}
-
-double** LUDecompose::createMatrix(int size)
-{
-    double** mat = new double *[size];
-    for (int i = 0; i < size; i++)
-    {
-        mat[i] = new double[size];
-    }
-    return mat;
-}
-
-double* LUDecompose::createVector(int size)
-{
-    double* vec = new double[size];
-    return vec;
-}
-
-double* LUDecompose::copyVector(double* vector, int size)
-{
-    for (int i = 0; i < size; i++)
-    {
-        this->vector[i] = vector[i];
-    }
-    return vector;
-}
-
-double** LUDecompose::copyMatrix(double** matrix, int size)
-{
-    for (int i = 0; i < size; i++)
-    {
-        for (int j = 0; j < size; j++)
-        {
-            this->matrix[i][j] = matrix[i][j];
-        }
-    }
-
-    return matrix;
-}
-
-LUDecompose::LUDecompose(double** matrix, double* vector, int size)
+LUDecompose::LUDecompose(std::vector<std::vector<double> > matrix, std::vector<double> vector, int size)
 {
     this->size = size;
-    this->vector = createVector(this->size);
-    this->matrix = createMatrix(this->size);
-
-
-    this->matrix = copyMatrix(matrix, this->size);
-    this->vector = copyVector(vector, this->size);
+    this->vector = std::vector<double>(vector);
+    this->matrix = std::vector<std::vector<double> >(matrix);
 }
 
-double* LUDecompose::lupSolve()
+std::vector<double> LUDecompose::lupSolve()
 {
-    double** a1, *x, *y;
-    int* p;
+    std::vector<std::vector<double> > a1(this->matrix);
+    std::vector<double> x(this->size), y(this->size);
 
-    a1 = createMatrix(size);
-    a1 = copyMatrix(matrix, size);
-    p = lupDecompose(a1, size);
-    y = forwardSub(a1, vector, p, size);
-    x = backSub(a1, y, size);
+    std::vector<int> p(this->size);
+
+    for (int i = 0; i < this->size; i++)
+    {
+        for (int j = 0; j < this->size; j++)
+        {
+            std::cout << a1[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
+    p = lupDecompose(a1);
+    for (int i = 0; i < this->size; i++)
+    {
+        for (int j = 0; j < this->size; j++)
+        {
+            std::cout << a1[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
+    y = forwardSub(a1, this->vector, p);
+    x = backSub(a1, y);
 
     return x;
 }
 
-int* LUDecompose::lupDecompose(double** mat, int size)
+std::vector<int> LUDecompose::lupDecompose(std::vector<std::vector<double>> &mat)
 {
     int j, k;
-    int* p = new int[size];
-    for (int i = 0; i < size; i++)
+    std::vector<int> p(this->size);
+    for (int i = 0; i < this->size; i++)
     {
         p[i] = i;
     }
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < this->size; i++)
     {
-        j = MaxInColumn(mat, i, size);
+        j = MaxInColumn(mat, i);
         if (i != j)
         {
             swapRow(mat, i, j);
@@ -95,13 +55,13 @@ int* LUDecompose::lupDecompose(double** mat, int size)
             p[i] = p[j];
             p[j] = k;
         }
-        for (int j = i+1; j < size; j++)
+        for (int j = i+1; j < this->size; j++)
         {
             mat[j][i] /= mat[i][i];
         }
-        for (int j = i+1; j < size; j++)
+        for (int j = i+1; j < this->size; j++)
         {
-            for (int k = i+1; k < size; k++)
+            for (int k = i+1; k < this->size; k++)
             {
                 mat[j][k] -= (mat[i][k]*mat[j][i]);
             }
@@ -111,19 +71,19 @@ int* LUDecompose::lupDecompose(double** mat, int size)
     return p;
 }
 
-void LUDecompose::swapRow(double** mat, int size1, int size2)
+void LUDecompose::swapRow(std::vector<std::vector<double> > &mat, int size1, int size2)
 {
-    double* temp = mat[size1];
+    auto temp = mat[size1];
     mat[size1] = mat[size2];
     mat[size2] = temp;
 }
 
-int LUDecompose::MaxInColumn(double** mat, int i, int size)
+int LUDecompose::MaxInColumn(std::vector<std::vector<double> > mat, int i)
 {
     int j = i + 1, k = i;
 
     double max = fabs(mat[i][i]);
-    for(; j < size; j++)
+    for(; j < this->size; j++)
     {
         if (fabs(mat[j][i]) > max)
         {
@@ -135,10 +95,10 @@ int LUDecompose::MaxInColumn(double** mat, int i, int size)
     return k;
 }
 
-double* LUDecompose::forwardSub(double** mat, double* vec, int* p, int size)
+std::vector<double> LUDecompose::forwardSub(std::vector<std::vector<double> > mat, std::vector<double> vec, std::vector<int> p)
 {
-    double* y = new double[size];
-    for (int i = 0; i < size; i++)
+    std::vector<double> y(this->size);
+    for (int i = 0; i < this->size; i++)
     {
         y[i] = vec[p[i]];
         for (int j = 0; j < i; j++)
@@ -150,25 +110,19 @@ double* LUDecompose::forwardSub(double** mat, double* vec, int* p, int size)
     return y;
 }
 
-double* LUDecompose::backSub(double** mat, double* y, int size)
+std::vector<double> LUDecompose::backSub(std::vector<std::vector<double> > mat, std::vector<double> y)
 {
-    double* x = new double[size];
+    std::vector<double> x(this->size);
 
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < this->size; i++)
     {
-        x[size-i-1] = y[size-1-i];
+        x[this->size-i-1] = y[this->size-1-i];
         for (int j = 0; j < i; j++)
         {
-            x[size-1-i] -= (mat[size-1-i][size-1-j]*x[size-1-j]);
+            x[this->size-1-i] -= (mat[this->size-1-i][this->size-1-j]*x[this->size-1-j]);
         }
-        x[size-1-i] /= mat[size-1-i][size-1-i];
+        x[this->size-1-i] /= mat[this->size-1-i][this->size-1-i];
     }
 
     return x;
-}
-
-LUDecompose::~LUDecompose()
-{
-    freeMatrix(matrix, size);
-    freeVector(vector, size);
 }
