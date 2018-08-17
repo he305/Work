@@ -6,8 +6,8 @@ class Measure
 public:
     Measure(double time, double meas);
     ~Measure();
-    double getTime();
-    double getMeas();
+    double getTime() const;
+    double getMeas() const;
 
 private:
     double time;

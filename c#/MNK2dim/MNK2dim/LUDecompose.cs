@@ -25,8 +25,34 @@ namespace MNK
             int[] p;
 
             a1 = copyMatrix(matrix);
+
+
+
+
+            //for (int i = 0; i < 2; i++)
+            //{
+            //    for (int j = 0; j < 2; j++)
+            //    {
+            //        Console.Write(a1[i, j] + " ");
+            //    }
+            //    Console.WriteLine();
+            //}
+
             p = lupDecompose(ref a1);
+
+            //for (int i = 0; i < 2; i++)
+            //{
+            //    for (int j = 0; j < 2; j++)
+            //    {
+            //        Console.Write(a1[i, j] + " ");
+            //    }
+            //    Console.WriteLine();
+            //}
             y = forwardSub(a1, vector, p);
+            for (int i = 0; i < y.Length; i++ )
+            {
+                Console.WriteLine(this.vector[i]);
+            }
             x = backSub(a1, y);
 
             return x;

@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 
+#include <QVector>
+#include "qcustomplot.h"
+
 namespace Ui {
 class MainWindow;
 }

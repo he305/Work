@@ -10,12 +10,12 @@ Measure::~Measure()
 {
 }
 
-double Measure::getTime()
+double Measure::getTime() const
 {
     return this->time;
 }
 
-double Measure::getMeas()
+double Measure::getMeas() const
 {
     return this->meas;
 }

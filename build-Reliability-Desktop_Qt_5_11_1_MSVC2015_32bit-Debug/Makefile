@@ -255,6 +255,7 @@ Makefile: ..\Reliability\Reliability.pro ..\..\..\Qt\Qt5.11.1\5.11.1\msvc2015\mk
 		..\..\..\Qt\Qt5.11.1\5.11.1\msvc2015\mkspecs\features\lex.prf \
 		..\Reliability\Reliability.pro \
 		..\..\..\Qt\Qt5.11.1\5.11.1\msvc2015\lib\qtmaind.prl \
+		..\..\..\Qt\Qt5.11.1\5.11.1\msvc2015\lib\Qt5PrintSupport.prl \
 		..\..\..\Qt\Qt5.11.1\5.11.1\msvc2015\lib\Qt5Widgets.prl \
 		..\..\..\Qt\Qt5.11.1\5.11.1\msvc2015\lib\Qt5Gui.prl \
 		..\..\..\Qt\Qt5.11.1\5.11.1\msvc2015\lib\Qt5Core.prl
@@ -439,6 +440,7 @@ Makefile: ..\Reliability\Reliability.pro ..\..\..\Qt\Qt5.11.1\5.11.1\msvc2015\mk
 ..\..\..\Qt\Qt5.11.1\5.11.1\msvc2015\mkspecs\features\lex.prf:
 ..\Reliability\Reliability.pro:
 ..\..\..\Qt\Qt5.11.1\5.11.1\msvc2015\lib\qtmaind.prl:
+..\..\..\Qt\Qt5.11.1\5.11.1\msvc2015\lib\Qt5PrintSupport.prl:
 ..\..\..\Qt\Qt5.11.1\5.11.1\msvc2015\lib\Qt5Widgets.prl:
 ..\..\..\Qt\Qt5.11.1\5.11.1\msvc2015\lib\Qt5Gui.prl:
 ..\..\..\Qt\Qt5.11.1\5.11.1\msvc2015\lib\Qt5Core.prl:

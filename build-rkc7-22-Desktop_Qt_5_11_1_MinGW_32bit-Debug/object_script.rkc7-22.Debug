@@ -1,0 +1,17 @@
+INPUT(
+./debug\main.o
+./debug\widget.o
+./debug\myplot.o
+./debug\qcustomplot.o
+./debug\resdialog.o
+./debug\myinputwarningdialog.o
+./debug\myinputerrordialog.o
+./debug\mygauss.o
+./debug\moc_widget.o
+./debug\moc_myplot.o
+./debug\moc_qcustomplot.o
+./debug\moc_resdialog.o
+./debug\moc_myinputwarningdialog.o
+./debug\moc_myinputerrordialog.o
+./debug\moc_mygauss.o
+);

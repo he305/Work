@@ -48,6 +48,8 @@ namespace MNK2dim
         
         static void Main(string[] args)
         {
+            
+
             string filenameLocal = AppDomain.CurrentDomain.BaseDirectory + "../../radio.xlsx";
             string filenameOptic = AppDomain.CurrentDomain.BaseDirectory + "../../optic.xlsx";
             var xlsApp = new Microsoft.Office.Interop.Excel.Application();

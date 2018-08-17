@@ -1,0 +1,17 @@
+INPUT(
+./release\main.o
+./release\widget.o
+./release\myplot.o
+./release\qcustomplot.o
+./release\resdialog.o
+./release\myinputwarningdialog.o
+./release\myinputerrordialog.o
+./release\mygauss.o
+./release\moc_widget.o
+./release\moc_myplot.o
+./release\moc_qcustomplot.o
+./release\moc_resdialog.o
+./release\moc_myinputwarningdialog.o
+./release\moc_myinputerrordialog.o
+./release\moc_mygauss.o
+);

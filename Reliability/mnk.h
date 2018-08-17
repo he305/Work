@@ -16,12 +16,14 @@ public:
         std::vector<double> yVector,
         int size);
 
+
+
     std::vector<double> Calculate();
 private:
     std::vector<double> xVector;
     std::vector<double> yVector;
     std::vector<double> weightVector;
-    int size;
+    size_t size;
 };
 
 #endif // MNK_H

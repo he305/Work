@@ -5,8 +5,10 @@
 #-------------------------------------------------
 
 QT       += core gui
+CONFIG += c++11
+QMAKE_CXXFLAGS += -std=c++11
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 TARGET = Reliability
 TEMPLATE = app
@@ -28,13 +30,15 @@ SOURCES += \
         mainwindow.cpp \
     measure.cpp \
     mnk.cpp \
-    ludecompose.cpp
+    ludecompose.cpp \
+    qcustomplot.cpp
 
 HEADERS += \
         mainwindow.h \
     measure.h \
     mnk.h \
-    ludecompose.h
+    ludecompose.h \
+    qcustomplot.h
 
 FORMS += \
         mainwindow.ui

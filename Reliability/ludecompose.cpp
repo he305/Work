@@ -14,24 +14,13 @@ std::vector<double> LUDecompose::lupSolve()
 
     std::vector<int> p(this->size);
 
-    for (int i = 0; i < this->size; i++)
-    {
-        for (int j = 0; j < this->size; j++)
-        {
-            std::cout << a1[i][j] << " ";
-        }
-        std::cout << std::endl;
-    }
+
     p = lupDecompose(a1);
-    for (int i = 0; i < this->size; i++)
-    {
-        for (int j = 0; j < this->size; j++)
-        {
-            std::cout << a1[i][j] << " ";
-        }
-        std::cout << std::endl;
-    }
     y = forwardSub(a1, this->vector, p);
+    for (int i = 0; i < y.size(); i++)
+    {
+        std::cout << this->vector[i] << std::endl;
+    }
     x = backSub(a1, y);
 
     return x;
@@ -78,7 +67,7 @@ void LUDecompose::swapRow(std::vector<std::vector<double> > &mat, int size1, int
     mat[size2] = temp;
 }
 
-int LUDecompose::MaxInColumn(std::vector<std::vector<double> > mat, int i)
+int LUDecompose::MaxInColumn(std::vector<std::vector<double> > mat, int i) const
 {
     int j = i + 1, k = i;
 

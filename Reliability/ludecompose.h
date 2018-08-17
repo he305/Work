@@ -13,7 +13,7 @@ public:
 
     std::vector<double> lupSolve();
 private:
-    int MaxInColumn(std::vector<std::vector<double>> mat, int i);
+    int MaxInColumn(std::vector<std::vector<double>> mat, int i) const;
     std::vector<int> lupDecompose(std::vector<std::vector<double> > &matrix);
     void swapRow(std::vector<std::vector<double> > &mat, int size1, int size2);
     std::vector<double> forwardSub(std::vector<std::vector<double> > mat, std::vector<double> vec, std::vector<int> p);
