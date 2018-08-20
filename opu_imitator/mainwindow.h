@@ -23,7 +23,6 @@ private:
     int port;
     QUdpSocket* socket;
     void send(QByteArray data);
-    int calcTimeOPU(double x, double y);
     void setSpeedXY(quint8 x, quint8 y);
     void getCurrentPoint();
     double xSpeed, ySpeed;
@@ -37,6 +36,7 @@ private:
 
     void gradus2Steps(Point &mP);
     void steps2Gradus(Point &mP);
+    int calcTimeOPU(Point &mP);
     int oldX, oldY;
 
     void findPelcoCS(QByteArray& command);

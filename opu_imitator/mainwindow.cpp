@@ -61,8 +61,11 @@ MainWindow::MainWindow(QWidget *parent) :
     send(tiltTest);
     send(runTest);
 
-    QByteArray timeTest = QByteArray::fromHex("ff ad 00 51");
-    send(timeTest);
+    QByteArray timeTestX = QByteArray::fromHex("ff ad 00 51");
+    send(timeTestX);
+
+    QByteArray timeTestY = QByteArray::fromHex("ff ad 00 53");
+    send(timeTestY);
 }
 
 MainWindow::~MainWindow()
@@ -112,13 +115,25 @@ void MainWindow::read()
         }
             break;
 
+        case 0x53: // get tilt
+        {
+            getCurrentPoint();
+            QByteArray tx = QByteArray::number((quint16)curPoint.iy, 16);
+            QString panRequest = "ff ad 00 63";
+            panRequest.append(tx.rightJustified(4, '0')).remove(' ');
+            QByteArray PelcoCommandOut = QByteArray::fromHex(panRequest.toLocal8Bit());
+            findPelcoCS(PelcoCommandOut);
+            qDebug() << hex << PelcoCommandOut;
+            send(PelcoCommandOut);
+        }
+            break;
         case 0x81: //Set pan
             setPoint.ix = result;
             if (sp == 0)
                 return;
 
             steps2Gradus(setPoint);
-            calcTimeOPU(setPoint.dx, setPoint.dy);
+            calcTimeOPU(setPoint);
             qDebug() << result;
             break;
         case 0x83:
@@ -127,7 +142,7 @@ void MainWindow::read()
                 return;
 
             steps2Gradus(setPoint);
-            calcTimeOPU(setPoint.dx, setPoint.dy);
+            calcTimeOPU(setPoint);
             qDebug() << result;
             break;
         case 0x87:
@@ -139,7 +154,7 @@ void MainWindow::read()
             steps2Gradus(setPoint);
             if (curPoint.dx == setPoint.dx && curPoint.dy == setPoint.dy)
                 return;
-            int time = calcTimeOPU(setPoint.dx, setPoint.dy);
+            int time = calcTimeOPU(setPoint);
             qDebug() << time;
 
             qDebug() << curPoint.ix << " " << curPoint.iy;
@@ -147,7 +162,9 @@ void MainWindow::read()
         }
             break;
         case 0x61:
-
+            qDebug() << result;
+            break;
+        case 0x63:
             qDebug() << result;
             break;
         default:
@@ -169,7 +186,7 @@ void MainWindow::getCurrentPoint()
 
     int deltaTime = endTime - curTime;
     qDebug() << deltaTime;
-    if (curPoint.ix >= setPoint.iy)
+    if (curPoint.ix >= setPoint.ix)
         curPoint.ix -= floor(xSpeed * deltaTime);
     else curPoint.ix += floor(xSpeed * deltaTime);
 
@@ -192,12 +209,12 @@ void MainWindow::findPelcoCS(QByteArray& command)
     command.append(cs);
 }
 
-int MainWindow::calcTimeOPU(double x, double y)
+int MainWindow::calcTimeOPU(Point &mP)
 {
     double azt, umt; // абсолютное значение угла поворота по азимуту
     int Tx, Ty; // время поворота по x и y в миллисуекундах
 
-    azt = fabs(x-curPoint.dx);
+    azt = fabs(mP.dx-curPoint.dx);
     if(azt > 360.0) azt -= 360.0*floor(azt/360.0);
     if(azt > 180.0) azt = 360.0 - azt;
 
@@ -210,7 +227,7 @@ int MainWindow::calcTimeOPU(double x, double y)
         Tx = int(y0pan + Kpan * (azt - x0pan));
     }
 
-    umt = fabs(y-curPoint.dy);
+    umt = fabs(mP.dy-curPoint.dy);
     if(umt < x0tilt)
     {
         if(umt < 0.06964) Ty = int(441.29801);
@@ -224,13 +241,11 @@ int MainWindow::calcTimeOPU(double x, double y)
     endTime = startTime + (Tx > Ty ? Tx: Ty);
 
     //Нужно пересчитать в тики из градусов, иначе некорректный результат (больше 100 по тикам)
-    qDebug() << "check: " << fabs(x - curPoint.dx);
-    if (Tx > 0)
-        xSpeed = fabs(x - curPoint.dx) / Tx;
-    else xSpeed = 0;
-    if (Ty > 0)
-        ySpeed = fabs(y - curPoint.dy) / Ty;
-    else ySpeed = 0;
+    qDebug() << "check: " << fabs(mP.dx - curPoint.dx);
+    xSpeed = Tx > 0 ? fabs(mP.ix - curPoint.ix) / Tx : 0;
+
+    ySpeed = Ty > 0 ? fabs(mP.iy - curPoint.iy) / Ty : 0;
+
     qDebug() << "speed: " << xSpeed << " " << ySpeed;
 
     return Tx > Ty ? Tx : Ty ;
