@@ -32,7 +32,7 @@ private:
     {
         quint16 ix, iy; // счетчики шагов двигателей углов
         double  dx, dy; // азимут и угол места в градусах
-    } setPoint, curPoint;
+    } setPoint, curPoint, testPoint;
 
     void gradus2Steps(Point &mP);
     void steps2Gradus(Point &mP);
@@ -49,6 +49,8 @@ private:
 
     int startTime;
     int endTime;
+    int oldStartTime;
+    int oldEndTime;
 private slots:
     void read();
 };

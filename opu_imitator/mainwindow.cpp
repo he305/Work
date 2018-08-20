@@ -25,6 +25,9 @@ MainWindow::MainWindow(QWidget *parent) :
     oldX = 0;
     oldY = 0;
 
+    oldStartTime = 0;
+    oldEndTime = 0;
+
     socket = new QUdpSocket(this);
     port = 6000;
     socket->bind(QHostAddress::Any, port);
@@ -35,37 +38,40 @@ MainWindow::MainWindow(QWidget *parent) :
 
     xSpeed = 0;
     ySpeed = 0;
-    setPoint.dx = 90;
-    setPoint.dy = 0;
+    setPoint.dx = 177.455;
+    setPoint.dy = 45;
+
+    setSpeedXY(0, 0);
 
     gradus2Steps(setPoint);
-    steps2Gradus(setPoint);
-    //qDebug() << setPoint.ix;
 
-    QByteArray tx;
-    tx = QByteArray::number((quint16)setPoint.ix, 16);
-    QString panRequest = "ff ad 00 81";
-    panRequest.append(tx.rightJustified(4, '0')).remove(' ');
-    QByteArray panTest = QByteArray::fromHex(panRequest.toLocal8Bit());
-    qDebug() << panTest.toHex();
 
-    QByteArray ty;
-    ty = QByteArray::number((quint16)setPoint.iy, 16);
-    QString tiltRequest = "ff ad 00 83";
-    tiltRequest.append(ty.rightJustified(4, '0')).remove(' ');
-    QByteArray tiltTest = QByteArray::fromHex(tiltRequest.toLocal8Bit());
-    qDebug() << tiltTest.toHex();
+//    testPoint.ix = 0;
+//    testPoint.iy = 0;
+//    QByteArray tx;
+//    tx = QByteArray::number((quint16)setPoint.ix, 16);
+//    QString panRequest = "ff ad 00 81";
+//    panRequest.append(tx.rightJustified(4, '0')).remove(' ');
+//    QByteArray panTest = QByteArray::fromHex(panRequest.toLocal8Bit());
+//    qDebug() << panTest.toHex();
 
-    QByteArray runTest = QByteArray::fromHex("ff ad 00 87 3f 3f ss");
-    send(panTest);
-    send(tiltTest);
-    send(runTest);
+//    QByteArray ty;
+//    ty = QByteArray::number((quint16)setPoint.iy, 16);
+//    QString tiltRequest = "ff ad 00 83";
+//    tiltRequest.append(ty.rightJustified(4, '0')).remove(' ');
+//    QByteArray tiltTest = QByteArray::fromHex(tiltRequest.toLocal8Bit());
+//    qDebug() << tiltTest.toHex();
 
-    QByteArray timeTestX = QByteArray::fromHex("ff ad 00 51");
-    send(timeTestX);
+//    //QByteArray runTest = QByteArray::fromHex("ff ad 00 87 3f 3f ss");
+//    send(panTest);
+//    send(tiltTest);
+//    //send(runTest);
 
-    QByteArray timeTestY = QByteArray::fromHex("ff ad 00 53");
-    send(timeTestY);
+//    QByteArray timeTestX = QByteArray::fromHex("ff ad 00 51");
+//    send(timeTestX);
+
+//    QByteArray timeTestY = QByteArray::fromHex("ff ad 00 53");
+//    send(timeTestY);
 }
 
 MainWindow::~MainWindow()
@@ -75,7 +81,7 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::send(QByteArray data) {
-  socket->writeDatagram(data, QHostAddress::Broadcast, port);
+  socket->writeDatagram(data, QHostAddress("10.16.2.25"), port);
 }
 
 void MainWindow::read()
@@ -91,7 +97,6 @@ void MainWindow::read()
 
         QByteArray ba = PelcoCommand.mid(3, 3);
         QDataStream ds(&ba, QIODevice::ReadOnly);
-        //std::vector<quint8> bytes(PelcoCommand.size());
         ds.setVersion(QDataStream::Qt_4_8);
 
         quint8 type;
@@ -102,15 +107,12 @@ void MainWindow::read()
         switch (type) {
         case 0x51: // get pan
         {
-
             getCurrentPoint();
-
             QByteArray tx = QByteArray::number((quint16)curPoint.ix, 16);
             QString panRequest = "ff ad 00 61";
             panRequest.append(tx.rightJustified(4, '0')).remove(' ');
             QByteArray PelcoCommandOut = QByteArray::fromHex(panRequest.toLocal8Bit());
             findPelcoCS(PelcoCommandOut);
-            qDebug() << hex << PelcoCommandOut;
             send(PelcoCommandOut);
         }
             break;
@@ -123,27 +125,24 @@ void MainWindow::read()
             panRequest.append(tx.rightJustified(4, '0')).remove(' ');
             QByteArray PelcoCommandOut = QByteArray::fromHex(panRequest.toLocal8Bit());
             findPelcoCS(PelcoCommandOut);
-            qDebug() << hex << PelcoCommandOut;
             send(PelcoCommandOut);
         }
             break;
         case 0x81: //Set pan
             setPoint.ix = result;
-            if (sp == 0)
-                return;
+
+            steps2Gradus(setPoint);
 
             steps2Gradus(setPoint);
             calcTimeOPU(setPoint);
-            qDebug() << result;
             break;
         case 0x83:
             setPoint.iy = result;
-            if (st == 0)
-                return;
+
+            steps2Gradus(setPoint);
 
             steps2Gradus(setPoint);
             calcTimeOPU(setPoint);
-            qDebug() << result;
             break;
         case 0x87:
         {
@@ -151,22 +150,22 @@ void MainWindow::read()
             sp = ((quint8*)&result)[1];
             //qDebug() << st << " " << sp;
             setSpeedXY(sp, st);
-            steps2Gradus(setPoint);
             if (curPoint.dx == setPoint.dx && curPoint.dy == setPoint.dy)
                 return;
-            int time = calcTimeOPU(setPoint);
-            qDebug() << time;
-
-            qDebug() << curPoint.ix << " " << curPoint.iy;
-            qDebug() << setPoint.ix << " " << setPoint.iy;
+            calcTimeOPU(setPoint);
         }
             break;
-        case 0x61:
-            qDebug() << result;
-            break;
-        case 0x63:
-            qDebug() << result;
-            break;
+//        case 0x61:
+//            testPoint.ix = result;
+//            steps2Gradus(testPoint);
+//            qDebug() << testPoint.dx;
+
+//            break;
+//        case 0x63:
+//            testPoint.iy = result;
+//            steps2Gradus(testPoint);
+//            qDebug() << testPoint.dy;
+//            break;
         default:
             break;
         }
@@ -175,25 +174,23 @@ void MainWindow::read()
 
 void MainWindow::getCurrentPoint()
 {
-    int curTime = QDateTime::currentDateTime().toTime_t();
+    int curTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
     if (curTime >= endTime)
     {
-        curPoint.ix = setPoint.ix;
-        curPoint.iy = setPoint.iy;
-        steps2Gradus(curPoint);
+        curPoint.dx = setPoint.dx;
+        curPoint.dy = setPoint.dy;
+        gradus2Steps(curPoint);
         return;
     }
 
-    int deltaTime = endTime - curTime;
-    qDebug() << deltaTime;
+    int deltaTime = curTime - startTime;
     if (curPoint.ix >= setPoint.ix)
-        curPoint.ix -= floor(xSpeed * deltaTime);
-    else curPoint.ix += floor(xSpeed * deltaTime);
+        curPoint.ix -= xSpeed * deltaTime;
+    else curPoint.ix += xSpeed * deltaTime;
 
-    //qDebug() << deltaTime << " " << x0pan << " " << y0pan;
     if (curPoint.iy >= setPoint.iy)
-        curPoint.iy -= floor(ySpeed * deltaTime);
-    else curPoint.iy += floor(ySpeed * deltaTime);
+        curPoint.iy -= ySpeed * deltaTime;
+    else curPoint.iy += ySpeed * deltaTime;
 
     steps2Gradus(curPoint);
 }
@@ -237,16 +234,16 @@ int MainWindow::calcTimeOPU(Point &mP)
         Ty = int(y0tilt + Ktilt * (umt - x0tilt));
     }
 
-    startTime = QDateTime::currentDateTime().toTime_t();
+    startTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+    if (startTime - oldStartTime < 1000)
+        startTime = oldStartTime;
+    else oldStartTime = startTime;
+
+
     endTime = startTime + (Tx > Ty ? Tx: Ty);
 
-    //Нужно пересчитать в тики из градусов, иначе некорректный результат (больше 100 по тикам)
-    qDebug() << "check: " << fabs(mP.dx - curPoint.dx);
     xSpeed = Tx > 0 ? fabs(mP.ix - curPoint.ix) / Tx : 0;
-
     ySpeed = Ty > 0 ? fabs(mP.iy - curPoint.iy) / Ty : 0;
-
-    qDebug() << "speed: " << xSpeed << " " << ySpeed;
 
     return Tx > Ty ? Tx : Ty ;
 }
